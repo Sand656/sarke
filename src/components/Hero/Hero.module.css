@@ -1,4 +1,6 @@
 .hero {
+  position: relative;
+  overflow: hidden;
   min-height: calc(100vh - var(--nav-h));
   min-height: calc(100svh - var(--nav-h));
   display: flex;
@@ -7,6 +9,8 @@
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gutter);
@@ -33,6 +37,20 @@
 .wordmark {
   display: inline-flex;
   align-items: flex-start;
+}
+
+/* Letters rise out of a mask on load */
+.charMask {
+  display: inline-block;
+  overflow: hidden;
+  padding-top: 0.06em;
+  margin-top: -0.06em;
+}
+
+.char {
+  display: inline-block;
+  animation: rise 1100ms var(--ease-out) both;
+  animation-delay: var(--d, 0ms);
 }
 
 /* Accent block caret: 12% of font size wide, full cap height, 530ms blink */
@@ -78,7 +96,7 @@ html[lang="ka"] .tagline {
   grid-column: 6 / -1;
   width: 100%;
   border: 1px solid var(--line);
-  background: var(--bg0);
+  background: var(--nav-bg);
   padding: var(--s-24);
 }
 
@@ -102,5 +120,15 @@ html[lang="ka"] .tagline {
   }
   .ctas :global(.btn) {
     width: 100%;
+  }
+}
+
+/* Keyframes are module-scoped, so they're declared here rather than in globals.css */
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: translateY(0);
   }
 }

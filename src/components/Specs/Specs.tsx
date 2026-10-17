@@ -28,14 +28,16 @@ export function Specs() {
     <section id="specs" className="section" aria-labelledby="specs-title">
       <div className="container">
         <div className="section-head">
-          <p className="label">{t.specs.label}</p>
-          <h2 id="specs-title" className="h2">
+          <p className="label" data-reveal>
+            {t.specs.label}
+          </p>
+          <h2 id="specs-title" className="h2" data-reveal="mask">
             {t.specs.title}
           </h2>
         </div>
         <dl className={styles.table}>
           {rows.map(([k, v, cls]) => (
-            <div key={k} className={styles.row}>
+            <div key={k} className={styles.row} data-reveal>
               <dt className="label">{k}</dt>
               <dd className={`readout ${cls ?? ""}`}>{v}</dd>
             </div>

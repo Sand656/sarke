@@ -61,7 +61,7 @@
 }
 
 .tocLink[aria-current="location"] .tocNum {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .content {
@@ -121,7 +121,7 @@
 
 .stepNum {
   flex: none;
-  color: var(--accent);
+  color: var(--accent-ink);
   line-height: 1.6;
 }
 

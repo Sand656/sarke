@@ -74,8 +74,10 @@ export function HowItWorks() {
     <section id="how" ref={sectionRef} className="section" aria-labelledby="how-title">
       <div className="container">
         <div className="section-head">
-          <p className="label">{t.how.label}</p>
-          <h2 id="how-title" className="h2">
+          <p className="label" data-reveal>
+            {t.how.label}
+          </p>
+          <h2 id="how-title" className="h2" data-reveal="mask">
             {t.how.title}
           </h2>
         </div>
@@ -93,7 +95,7 @@ export function HowItWorks() {
 
           <ol className={styles.steps}>
             {t.how.steps.map((s) => (
-              <li key={s.num} className={styles.step} data-step>
+              <li key={s.num} className={styles.step} data-step data-reveal>
                 {!wide && (
                   <div className={styles.frame}>
                     <DeskScene layout={layout} decorative />

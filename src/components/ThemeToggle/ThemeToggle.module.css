@@ -1,0 +1,67 @@
+.toggle {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  color: var(--text-hi);
+  transition:
+    border-color var(--t-smooth) var(--ease-out),
+    background-color var(--t-smooth) var(--ease-out);
+}
+
+.toggle:hover {
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+
+.icon {
+  overflow: visible;
+  transition: transform 600ms var(--ease-out);
+}
+
+.core {
+  fill: currentColor;
+  transition: r 600ms var(--ease-out);
+}
+
+.rays line {
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.rays {
+  transform-origin: 12px 12px;
+  transition:
+    transform 600ms var(--ease-out),
+    opacity 300ms var(--ease-out);
+}
+
+.maskCircle {
+  transition:
+    cx 600ms var(--ease-out),
+    cy 600ms var(--ease-out);
+}
+
+/* Dark theme shows the moon (click → light) */
+.toggle[data-theme-state="dark"] .icon {
+  transform: rotate(-30deg);
+}
+.toggle[data-theme-state="dark"] .core {
+  r: 8px;
+}
+.toggle[data-theme-state="dark"] .maskCircle {
+  cx: 17px;
+  cy: 7px;
+}
+.toggle[data-theme-state="dark"] .rays {
+  transform: rotate(-45deg) scale(0.4);
+  opacity: 0;
+}
+
+/* Light theme shows the sun (click → dark) */
+.toggle[data-theme-state="light"] .rays {
+  transform: none;
+  opacity: 1;
+}

@@ -25,6 +25,9 @@ const en = {
     menuClose: "Close menu",
     language: "Language",
     primary: "Primary",
+    themeLight: "Switch to light mode",
+    themeDark: "Switch to dark mode",
+    backToTop: "Back to top",
   },
   hero: {
     label: "Windows 10/11",

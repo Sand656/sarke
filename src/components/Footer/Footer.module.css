@@ -50,6 +50,7 @@
 }
 
 .links a {
+  display: inline-block;
   color: var(--text-mid);
   font-size: 14px;
   transition: color var(--t-ui) linear;

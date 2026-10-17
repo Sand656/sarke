@@ -30,7 +30,7 @@
 }
 
 .sep {
-  color: var(--accent);
+  color: var(--accent-ink);
   padding: 0 var(--s-24);
 }
 

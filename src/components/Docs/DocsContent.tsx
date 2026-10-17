@@ -55,7 +55,7 @@ export function DocsContent() {
   }, []);
 
   const section = (key: SectionKey, children: React.ReactNode) => (
-    <section id={SECTION_IDS[key]} className={styles.section} aria-labelledby={`${SECTION_IDS[key]}-h`}>
+    <section data-reveal id={SECTION_IDS[key]} className={styles.section} aria-labelledby={`${SECTION_IDS[key]}-h`}>
       <h2 id={`${SECTION_IDS[key]}-h`} className={`h3 ${styles.h}`}>
         {d.sections[key]}
       </h2>
@@ -76,8 +76,10 @@ export function DocsContent() {
   return (
     <div className={`container ${styles.layout}`}>
       <header className={styles.head}>
-        <p className="label">{d.label}</p>
-        <h1 className="h2">{d.title}</h1>
+        <p className="label intro-up">{d.label}</p>
+        <h1 className="h2 intro-up" style={{ "--d": "80ms" } as React.CSSProperties}>
+          {d.title}
+        </h1>
       </header>
 
       <nav className={styles.toc} aria-label={d.toc}>

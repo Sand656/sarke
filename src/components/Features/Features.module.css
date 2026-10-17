@@ -1,17 +1,47 @@
 .grid {
+  perspective: 1200px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gutter);
 }
 
 .card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
   background: var(--bg1);
   border: 1px solid var(--line-strong);
   padding: var(--s-24);
   display: flex;
   flex-direction: column;
   gap: var(--s-12);
-  transition: border-color var(--t-ui) linear;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition:
+    border-color var(--t-smooth) var(--ease-out),
+    transform 500ms var(--ease-out);
+}
+
+/* Spotlight that follows the pointer */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(260px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
+  transition: opacity var(--t-smooth) var(--ease-out);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card > * {
+  position: relative;
+  transform: translateZ(24px);
 }
 
 .top {

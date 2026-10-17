@@ -84,10 +84,12 @@ export function Download() {
   return (
     <section id="download" className="section" aria-labelledby="download-title">
       <div className="container">
-        <p className="label">{t.download.label}</p>
-        <div className={styles.panel}>
+        <p className="label" data-reveal>
+            {t.download.label}
+          </p>
+        <div className={styles.panel} data-reveal>
           <div className={styles.left}>
-            <h2 id="download-title" className="h2">
+            <h2 id="download-title" className="h2" data-reveal="mask">
               {t.download.title}
             </h2>
 
@@ -124,11 +126,11 @@ export function Download() {
         </div>
 
         <div className={styles.notices}>
-          <div className="notice">
+          <div className="notice" data-reveal>
             <p className="label">{t.download.smartscreenTitle}</p>
             <p className="body">{t.download.smartscreen}</p>
           </div>
-          <div className="notice">
+          <div className="notice" data-reveal>
             <p className="label">{t.download.securityTitle}</p>
             <p className="body">{t.download.security}</p>
           </div>

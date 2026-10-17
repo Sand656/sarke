@@ -10,7 +10,7 @@ export function FaqList({ open = false }: { open?: boolean }) {
   return (
     <div className={styles.list}>
       {t.faq.items.map((item, i) => (
-        <details key={i} className={styles.item} open={open || undefined}>
+        <details key={i} className={styles.item} open={open || undefined} data-reveal>
           <summary className={styles.summary}>
             <span className={`readout ${styles.num}`}>{String(i + 1).padStart(2, "0")}</span>
             <span className={styles.q}>{item.q}</span>

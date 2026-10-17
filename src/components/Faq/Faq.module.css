@@ -21,8 +21,14 @@
   display: none;
 }
 
+.summary {
+  transition: padding-left var(--t-smooth) var(--ease-out);
+}
+.summary:hover {
+  padding-left: var(--s-8);
+}
 .summary:hover .q {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .num {
@@ -63,12 +69,19 @@
   bottom: 0;
   left: 5.5px;
   width: 1px;
+  transition: transform var(--t-smooth) var(--ease-out);
+}
+.icon {
+  transition: transform var(--t-smooth) var(--ease-out);
+}
+.item[open] .icon {
+  transform: rotate(180deg);
 }
 .item[open] .icon::after {
-  display: none;
+  transform: scaleY(0);
 }
 .item[open] .num {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .a {

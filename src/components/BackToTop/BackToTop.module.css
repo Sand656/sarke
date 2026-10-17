@@ -1,0 +1,73 @@
+.button {
+  position: fixed;
+  right: var(--s-24);
+  bottom: var(--s-24);
+  z-index: 40;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg1);
+  border: 1px solid var(--line-strong);
+  color: var(--text-hi);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition:
+    opacity var(--t-smooth) var(--ease-out),
+    transform var(--t-smooth) var(--ease-out),
+    visibility 0s linear var(--t-smooth),
+    border-color var(--t-smooth) var(--ease-out);
+}
+
+.button[data-visible="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity var(--t-smooth) var(--ease-out),
+    transform var(--t-smooth) var(--ease-out),
+    visibility 0s,
+    border-color var(--t-smooth) var(--ease-out);
+}
+
+.button:hover {
+  border-color: var(--text-lo);
+}
+
+.ring {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  pointer-events: none;
+}
+
+.ring rect {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.arrow path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: square;
+}
+
+.arrow {
+  transition: transform var(--t-smooth) var(--ease-out);
+}
+
+.button:hover .arrow {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 639px) {
+  .button {
+    right: var(--s-16);
+    bottom: var(--s-16);
+  }
+}

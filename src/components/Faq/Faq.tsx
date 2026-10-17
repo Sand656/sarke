@@ -9,8 +9,10 @@ export function Faq() {
     <section id="faq" className="section" aria-labelledby="faq-title">
       <div className="container">
         <div className="section-head">
-          <p className="label">{t.faq.label}</p>
-          <h2 id="faq-title" className="h2">
+          <p className="label" data-reveal>
+            {t.faq.label}
+          </p>
+          <h2 id="faq-title" className="h2" data-reveal="mask">
             {t.faq.title}
           </h2>
         </div>

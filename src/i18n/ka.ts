@@ -27,6 +27,9 @@ const ka: Dict = {
     menuClose: "მენიუს დახურვა",
     language: "ენა",
     primary: "მთავარი ნავიგაცია",
+    themeLight: "ღია თემაზე გადართვა",
+    themeDark: "მუქ თემაზე გადართვა",
+    backToTop: "ზემოთ დაბრუნება",
   },
   hero: {
     label: "Windows 10/11",

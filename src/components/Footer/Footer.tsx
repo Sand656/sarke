@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.grid}`}>
-        <div className={styles.brandCol}>
+        <div className={styles.brandCol} data-reveal>
           <p className={styles.wordmark}>
             <span className={styles.square} aria-hidden="true" />
             SARKE
@@ -19,22 +19,22 @@ export function Footer() {
           <p className="label">{t.footer.meaning}</p>
         </div>
 
-        <nav className={styles.col} aria-label={t.footer.links}>
+        <nav className={styles.col} aria-label={t.footer.links} data-reveal>
           <p className="label">{t.footer.links}</p>
           <ul className={styles.links}>
             <li>
-              <a href={REPO_URL}>{t.footer.github}</a>
+              <a href={REPO_URL} className="u-link">{t.footer.github}</a>
             </li>
             <li>
-              <a href={RELEASES_URL}>{t.footer.releases}</a>
+              <a href={RELEASES_URL} className="u-link">{t.footer.releases}</a>
             </li>
             <li>
-              <Link href="/docs">{t.footer.docs}</Link>
+              <Link href="/docs" className="u-link">{t.footer.docs}</Link>
             </li>
           </ul>
         </nav>
 
-        <div className={styles.col}>
+        <div className={styles.col} data-reveal>
           <p className="label">{t.footer.team}</p>
           {/* TODO: team credits */}
           <p className={styles.todo}>{t.footer.teamTodo}</p>

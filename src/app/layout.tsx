@@ -3,7 +3,11 @@ import "./globals.css";
 import { georgian, mono } from "./fonts";
 import { Footer } from "@/components/Footer/Footer";
 import { Nav } from "@/components/Nav/Nav";
+import { BackToTop } from "@/components/BackToTop/BackToTop";
 import { Providers } from "@/components/Providers";
+import { RevealManager } from "@/components/RevealManager";
+import { SmoothScroll } from "@/lib/smooth";
+import { THEME_BOOT_SCRIPT } from "@/lib/themeScript";
 import { SITE_URL } from "@/config";
 import en from "@/i18n/en";
 
@@ -30,20 +34,30 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B0B0C",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0B0B0C" },
+    { media: "(prefers-color-scheme: light)", color: "#F5F5F2" },
+  ],
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${mono.variable} ${georgian.variable}`}>
+    // suppressHydrationWarning: the boot script sets data-theme / .js on <html> before React hydrates
+    <html lang="en" data-theme="dark" className={`${mono.variable} ${georgian.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+      </head>
       <body>
         <Providers>
+          <SmoothScroll />
+          <RevealManager />
           <Nav />
           <main id="main" tabIndex={-1}>
             {children}
           </main>
           <Footer />
+          <BackToTop />
         </Providers>
       </body>
     </html>

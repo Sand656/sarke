@@ -90,7 +90,7 @@
 
 .stepNum {
   flex: none;
-  color: var(--accent);
+  color: var(--accent-ink);
   line-height: 1.6;
   padding-top: 1px;
 }
