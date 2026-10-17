@@ -3,15 +3,15 @@
 import { useSyncExternalStore } from "react";
 import { CodeBlock } from "@/components/CodeBlock/CodeBlock";
 import { CopyButton } from "@/components/CopyButton/CopyButton";
-import { DOWNLOAD_URL, RELEASES_URL } from "@/config";
+import { DOWNLOAD_URL, RELEASES_URL, isRepoConfigured } from "@/config";
 import { useLang } from "@/i18n/LangProvider";
 import { formatMB, useRelease, type ReleaseInfo } from "@/lib/release";
 import { rich } from "@/lib/rich";
 import styles from "./Download.module.css";
 
 const COMMANDS: Record<number, string> = {
-  2: "kvm_host.exe",
-  3: "kvm_client.exe --host <A's IP>",
+  2: "sarke_host.exe",
+  3: "sarke_client.exe --host <A's IP>",
 };
 
 function detectWindows() {
@@ -98,13 +98,22 @@ export function Download() {
 
             {!isWindows && <p className={`body ${styles.warnNote}`}>{t.download.notWindows}</p>}
 
+            {/* No GitHub links until the release repo is set (src/config.ts), so nothing 404s */}
             <div className={styles.buttons}>
-              <a href={DOWNLOAD_URL} className="btn btn-primary">
-                {t.download.button}
-              </a>
-              <a href={RELEASES_URL} className="btn btn-secondary">
-                {t.download.all}
-              </a>
+              {isRepoConfigured ? (
+                <>
+                  <a href={DOWNLOAD_URL} className="btn btn-primary">
+                    {t.download.button}
+                  </a>
+                  <a href={RELEASES_URL} className="btn btn-secondary">
+                    {t.download.all}
+                  </a>
+                </>
+              ) : (
+                <span className={`btn btn-primary ${styles.soon}`} aria-disabled="true">
+                  {t.download.soon}
+                </span>
+              )}
             </div>
           </div>
 

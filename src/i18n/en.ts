@@ -10,7 +10,6 @@ const en = {
     copy: "Copy",
     copied: "Copied",
     copyFailed: "Copy failed",
-    planned: "Planned",
     todo: "TODO",
   },
   nav: {
@@ -56,7 +55,7 @@ const en = {
     chapters: [
       {
         title: "Connect",
-        text: "Run `kvm_host.exe` on your main PC and `kvm_client.exe` on the others. They link up over your local network.",
+        text: "Run `sarke_host.exe` on your main PC and `sarke_client.exe` on the others. They link up over your local network.",
       },
       {
         title: "One cursor",
@@ -147,14 +146,15 @@ const en = {
     loading: "Loading release info",
     unavailable: "Release info unavailable",
     button: "Download .zip",
+    soon: "Download coming soon",
     all: "All releases",
     notWindows: "Sarke runs on Windows 10/11. Download it on your PC.",
     quickTitle: "Quick start",
     steps: [
       "Download and extract the zip on **every** PC you want to connect.",
-      "On the main PC, allow `kvm_host.exe` in Windows Firewall (Private network).",
-      "Run `kvm_host.exe` on the main PC.",
-      "Run `kvm_client.exe --host <A's IP>` on each of the other PCs.",
+      "On the main PC, allow `sarke_host.exe` in Windows Firewall (Private network).",
+      "Run `sarke_host.exe` on the main PC.",
+      "Run `sarke_client.exe --host <A's IP>` on each of the other PCs.",
       "Push the cursor off a screen edge. Drag windows and files across as if it were one desktop.",
     ],
     smartscreenTitle: "SmartScreen",
@@ -163,23 +163,12 @@ const en = {
     securityTitle: "Security",
     security: "This version has no encryption. Use Sarke only on networks you trust.",
   },
-  roadmap: {
-    title: "What's next",
-    note: "Not available yet. No dates.",
-    items: [
-      "H.264 hardware encoding",
-      "GPU zero-copy pipeline",
-      "Virtual monitor driver, so another PC appears as a real extra monitor",
-      "Encrypted connection with PIN pairing",
-      "Shared clipboard",
-    ],
-  },
   faq: {
     title: "Questions",
     items: [
       {
         q: "How many computers can I connect?",
-        a: "Two or more Windows PCs on the same local network. One runs `kvm_host.exe`, the others run `kvm_client.exe`.",
+        a: "Two or more Windows PCs on the same local network. One runs `sarke_host.exe`, the others run `sarke_client.exe`.",
       },
       {
         q: "Can I move files between computers?",
@@ -211,7 +200,7 @@ const en = {
       },
       {
         q: "Why don't clicks work in some apps?",
-        a: "Windows running as Administrator only receive input if the host is also run as Administrator. Right-click `kvm_host.exe` → Run as administrator.",
+        a: "Windows running as Administrator only receive input if the host is also run as Administrator. Right-click `sarke_host.exe` → Run as administrator.",
       },
       {
         q: "How do I get my mouse back if something goes wrong?",
@@ -250,11 +239,11 @@ const en = {
       "Two or more PCs running **Windows 10 or 11, x64**.",
       "All PCs on the **same local network**.",
       "TCP port **50500** (control + input) and **50501** (video) reachable on the main PC.",
-      "`kvm_host.exe` allowed in Windows Firewall on **Private** networks.",
+      "`sarke_host.exe` allowed in Windows Firewall on **Private** networks.",
     ],
     install: [
       "There is no installer. Download `sarke-windows-x64.zip` and extract it on **every** PC.",
-      "The folder contains `kvm_host.exe`, `kvm_client.exe` and `config.json`.",
+      "The folder contains `sarke_host.exe`, `sarke_client.exe` and `config.json`.",
       "The .exe is unsigned, so SmartScreen may show “Windows protected your PC”. Click More info → Run anyway. Verify the SHA-256 checksum from the release if you want to be sure.",
     ],
     firstRunIntro:
@@ -280,7 +269,7 @@ const en = {
     ],
     firewall: [
       "Sarke uses TCP **50500** (control + input) and **50501** (video). The other PCs connect to these ports on the main PC.",
-      "The first time `kvm_host.exe` runs, Windows may ask whether to allow it. Allow it on **Private networks**.",
+      "The first time `sarke_host.exe` runs, Windows may ask whether to allow it. Allow it on **Private networks**.",
       "Or add the rule yourself from an Administrator terminal (adjust the path):",
     ],
     troubleshootingIntro: "The common problems and their fixes:",

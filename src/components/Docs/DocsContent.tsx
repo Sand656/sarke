@@ -23,7 +23,7 @@ const SECTION_IDS: Record<SectionKey, string> = {
 };
 
 const FIREWALL_CMD =
-  'netsh advfirewall firewall add rule name="Sarke host" dir=in action=allow program="C:\\Sarke\\kvm_host.exe" enable=yes profile=private';
+  'netsh advfirewall firewall add rule name="Sarke host" dir=in action=allow program="C:\\Sarke\\sarke_host.exe" enable=yes profile=private';
 
 function Todo({ children }: { children: React.ReactNode }) {
   return (
@@ -117,8 +117,8 @@ export function DocsContent() {
                   <div className={styles.stepBody}>
                     <p className="body">{rich(step)}</p>
                     {i === 0 && <CodeBlock code="ipconfig" />}
-                    {i === 1 && <CodeBlock code="kvm_host.exe" />}
-                    {i === 2 && <CodeBlock code="kvm_client.exe --host <A's IP>" />}
+                    {i === 1 && <CodeBlock code="sarke_host.exe" />}
+                    {i === 2 && <CodeBlock code="sarke_client.exe --host <A's IP>" />}
                   </div>
                 </li>
               ))}

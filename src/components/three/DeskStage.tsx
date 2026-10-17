@@ -32,7 +32,7 @@ function makeScreenTextures() {
   return getSprites().layers.map((c) => {
     const texture = new THREE.CanvasTexture(c);
     texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 8;
+    texture.anisotropy = 16; // clamped to the GPU's maximum by three.js
     return texture;
   });
 }
@@ -63,7 +63,7 @@ function makeKeyboard() {
   g.fill();
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
-  t.anisotropy = 8;
+  t.anisotropy = 16;
   return t;
 }
 
@@ -271,16 +271,19 @@ function Scene({ mode, progressRef }: Props) {
 
     const c = cam.current;
     const aspect = three.size.width / three.size.height;
-    if (mode === "scrub") {
+    const narrow = aspect < 1.25;
+    // Phones: once the devices are on the desk, follow the cursor from machine to machine
+    // at close range so the screens stay big and readable.
+    const follow = narrow && (mode === "loop" || p > 0.22);
+    if (follow) {
+      const screen = Math.min(2, Math.max(0, Math.floor(state.cursor.x / 1024)));
+      const target = PLACES[screen].pos;
+      c.pos.set(target.x * 0.92 + Math.sin(t * 0.3) * 0.12, 0.65, 7.2 * Math.max(1, 1.1 / aspect));
+      c.look.set(target.x * 0.92, -0.3, 0);
+    } else if (mode === "scrub") {
       shotAt(p, c.pos, c.look);
       // Back off for narrow frames so the chapter's devices stay in view
       c.pos.z *= Math.max(1, 1.85 / aspect);
-    } else if (aspect < 1.25) {
-      // Phones: follow the cursor from machine to machine at close range
-      const screen = Math.min(2, Math.max(0, Math.floor(state.cursor.x / 1024)));
-      const target = PLACES[screen].pos;
-      c.pos.set(target.x * 0.92 + Math.sin(t * 0.3) * 0.15, 0.7, 7.6 * Math.max(1, 1.15 / aspect));
-      c.look.set(target.x * 0.92, -0.35, 0);
     } else {
       // Desktop: the whole setup, framed in the upper middle of the stage
       c.pos.set(pointer.current.x * 0.8 + Math.sin(t * 0.12) * 0.35, 1.0 - pointer.current.y * 0.3, 12.4 * Math.max(1, 1.85 / aspect));
@@ -327,10 +330,12 @@ function Scene({ mode, progressRef }: Props) {
 export default function DeskStage({ mode, progressRef, className }: Props) {
   const wrap = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(true);
-  // Supersampled up to 2× (sharp edges even on 1× displays), dropping to 1× automatically
-  // when the GPU falls behind.
+  // Supersampled for sharp edges: 2× on 1× displays, up to 2.5× on high-DPI phones.
+  // When the GPU falls behind it steps down — but never below 1.5× on high-DPI screens,
+  // where 1× looks soft.
   const [quality, setQuality] = useState<"high" | "low">("high");
-  const dpr = quality === "high" ? 2 : 1;
+  const [deviceDpr] = useState(() => (typeof window === "undefined" ? 1 : window.devicePixelRatio || 1));
+  const dpr = quality === "high" ? Math.min(2.5, Math.max(2, deviceDpr)) : deviceDpr > 1.5 ? 1.5 : 1;
 
   useEffect(() => {
     const el = wrap.current;

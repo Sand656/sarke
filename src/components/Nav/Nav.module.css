@@ -1,69 +1,77 @@
-/* Apple-style product nav: slim, full width, translucent */
-.nav {
-  position: sticky;
-  top: 0;
+/* ===== Dynamic-Island header ===== */
+
+.header {
+  position: fixed;
+  top: 12px;
+  left: 0;
+  right: 0;
   z-index: 50;
-  transition: transform 520ms var(--ease-emph);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
 }
 
-/* Slides away while scrolling down; returns on scroll up (never while the menu is open) */
-.nav[data-hidden="true"]:not([data-open]) {
-  transform: translateY(-100%);
+/* Always black, like the real island — in both themes. Local tokens keep children consistent. */
+.island {
+  --ink: #f5f5f7;
+  --ink-2: #c7c7cc;
+  --ink-3: #8e8e93;
+  --bg: #000000;
+  --bg-high: #2c2c2e;
+  --line: rgba(255, 255, 255, 0.12);
+  --spring: cubic-bezier(0.32, 0.72, 0, 1);
+
+  pointer-events: auto;
+  max-width: calc(100vw - 24px);
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 26px;
+  box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.55);
+  transition:
+    border-radius 520ms var(--spring),
+    width 520ms var(--spring),
+    box-shadow 520ms var(--spring);
 }
 
-.wrap {
-  position: relative;
-  z-index: 1;
-}
-
-.nav::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--nav-bg);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid var(--line);
-  transition: opacity 400ms var(--ease-out);
-}
-
-/* Transparent at the very top, frosted once the page moves */
-.nav[data-scrolled="false"]:not([data-open])::before {
-  opacity: 0;
-}
-
-.bar {
-  height: var(--nav-h);
+.row {
+  height: 48px;
   display: flex;
   align-items: center;
-  gap: var(--s-32);
+  padding: 0 6px 0 16px;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 21px;
+  gap: 8px;
+  flex: none;
+  margin-right: 10px;
+  color: var(--ink);
+}
+
+.brandName {
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: var(--ink);
-  flex: none;
 }
 
 /* Two overlapping squares: one desktop mirrored into the next */
 .mark {
   position: relative;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 .mark::before,
 .mark::after {
   content: "";
   position: absolute;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 3px;
-  transition: transform var(--dur-slow) var(--ease-emph);
+  transition: transform 520ms var(--spring);
 }
 .mark::before {
   left: 0;
@@ -83,44 +91,141 @@
   transform: translate(-2px, -2px);
 }
 
+/* Both middle parts collapse to zero width with a grid track, so the island resizes smoothly */
+.status,
+.expand {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 520ms var(--spring);
+}
+.statusInner,
+.expandInner {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.status {
+  opacity: 0;
+  transition:
+    grid-template-columns 520ms var(--spring),
+    opacity 300ms ease;
+}
+.island[data-status="true"] .status {
+  grid-template-columns: 1fr;
+  opacity: 1;
+}
+.statusInner {
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.pulse {
+  flex: none;
+  margin-left: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2997ff;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(41, 151, 255, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(41, 151, 255, 0);
+  }
+}
+
+.expandInner {
+  gap: 4px;
+}
+
 .links {
   display: flex;
-  gap: var(--s-24);
-  margin-left: auto;
+  align-items: center;
+  gap: 2px;
+  margin-right: 6px;
+}
+.statusInner,
+.expandInner > :last-child {
+  margin-right: 10px;
 }
 
 .link {
-  font-size: 12px;
+  position: relative;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 13px;
   color: var(--ink-2);
-  white-space: nowrap;
-  transition: color var(--dur-normal) var(--ease-out);
+  transition: color 240ms ease;
 }
 .link:hover,
 .link[aria-current] {
   color: var(--ink);
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  gap: var(--s-12);
+/* Underline draws in from the left on hover, retracts to the right on leave,
+   and stays under the section you're reading */
+.link::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 560ms var(--spring);
+}
+.link:hover::after,
+.link:focus-visible::after,
+.link[aria-current]::after {
+  transform: scaleX(1);
+  transform-origin: left center;
 }
 
-/* Small blue pill, like a product nav's "Buy" */
+/* Desktop: expanded at the top of the page, on hover and on keyboard focus */
+@media (min-width: 900px) {
+  .island[data-top="true"] .expand,
+  .island:hover .expand,
+  .island:focus-within .expand {
+    grid-template-columns: 1fr;
+  }
+  .island[data-top="true"] .status,
+  .island:hover .status,
+  .island:focus-within .status {
+    grid-template-columns: 0fr;
+    opacity: 0;
+  }
+  .island:hover {
+    box-shadow: 0 18px 44px -16px rgba(0, 0, 0, 0.65);
+  }
+}
+
 .cta {
+  flex: none;
+  height: 34px;
   display: inline-flex;
   align-items: center;
-  height: 28px;
-  padding: 0 12px;
+  padding: 0 14px;
   border-radius: 980px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  color: var(--on-accent);
-  background: var(--accent);
-  transition: background-color var(--dur-normal) var(--ease-out);
+  color: #fff;
+  background: #0071e3;
+  transition: background-color 200ms ease;
 }
 .cta:hover {
-  background: var(--accent-hover);
+  background: #0077ed;
 }
 
 .lang {
@@ -129,16 +234,8 @@
   gap: 2px;
 }
 
-.langItem {
-  display: inline-flex;
-}
-
-.langSep {
-  display: none;
-}
-
 .langBtn {
-  height: 28px;
+  height: 30px;
   min-width: 30px;
   padding: 0 6px;
   border-radius: 980px;
@@ -146,8 +243,8 @@
   font-weight: 500;
   color: var(--ink-3);
   transition:
-    color var(--dur-normal) var(--ease-out),
-    background-color var(--dur-normal) var(--ease-out);
+    color 200ms ease,
+    background-color 200ms ease;
 }
 .langBtn:hover {
   color: var(--ink);
@@ -159,17 +256,19 @@
 
 .menuBtn {
   display: none;
-  width: 40px;
-  height: 40px;
+  flex: none;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  margin-left: 2px;
 }
 
 .bars {
   position: relative;
-  width: 17px;
-  height: 9px;
+  width: 16px;
+  height: 8px;
   display: block;
 }
 .bars span {
@@ -180,127 +279,103 @@
   border-radius: 2px;
   background: var(--ink);
   transition:
-    transform var(--dur-slow) var(--ease-emph),
-    top var(--dur-slow) var(--ease-emph);
+    transform 520ms var(--spring),
+    top 520ms var(--spring);
 }
 .bars span:first-child {
   top: 0;
 }
 .bars span:last-child {
-  top: 7px;
+  top: 6.6px;
 }
 .bars[data-open="true"] span:first-child {
-  top: 3.5px;
+  top: 3.3px;
   transform: rotate(45deg);
 }
 .bars[data-open="true"] span:last-child {
-  top: 3.5px;
+  top: 3.3px;
   transform: rotate(-45deg);
 }
 
-/* Full-screen menu */
-.menu {
-  position: fixed;
-  inset: var(--nav-h) 0 0 0;
-  padding: var(--s-32) 0 var(--s-48);
-  background: var(--bg);
-  overflow-y: auto;
+/* Phone menu: the island itself grows downward */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 560ms var(--spring);
 }
-.menu[hidden] {
-  display: none;
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+.island[data-open="true"] .panel {
+  grid-template-rows: 1fr;
 }
 
-.menuList {
+.panelLinks {
   display: flex;
   flex-direction: column;
-  gap: var(--s-4);
+  padding: 8px 12px 4px;
 }
 
-.menuLink {
+.panelLink {
   display: block;
-  padding: var(--s-8) 0;
-  font-size: 28px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(-6px);
   transition:
-    color var(--dur-normal) var(--ease-out),
-    transform var(--dur-slow) var(--ease-emph);
+    opacity 300ms ease,
+    transform 420ms var(--spring),
+    background-color 200ms ease;
 }
-.menuLink:hover,
-.menuLink[aria-current] {
-  color: var(--accent-ink);
+.panelLink:hover,
+.panelLink[aria-current] {
+  background: rgba(255, 255, 255, 0.08);
 }
-
-.menuFoot {
-  margin-top: var(--s-48);
-}
-
-.menu[data-state="open"] {
-  animation: menu-in var(--dur-normal) var(--ease-out) both;
-}
-.menu[data-state="closing"] {
-  animation: menu-out 200ms var(--ease-in) both;
-}
-.menu[data-state="open"] .menuList li {
-  animation: link-in 600ms var(--ease-emph) both;
-}
-.menu[data-state="open"] .menuList li:nth-child(2) {
-  animation-delay: 40ms;
-}
-.menu[data-state="open"] .menuList li:nth-child(3) {
-  animation-delay: 80ms;
-}
-.menu[data-state="open"] .menuList li:nth-child(4) {
-  animation-delay: 120ms;
-}
-.menu[data-state="open"] .menuList li:nth-child(5) {
-  animation-delay: 160ms;
+.island[data-open="true"] .panelLink {
+  opacity: 1;
+  transform: none;
+  transition-delay: 120ms;
 }
 
-@keyframes menu-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes menu-out {
-  to {
-    opacity: 0;
-  }
-}
-@keyframes link-in {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.panelFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 16px;
+  border-top: 1px solid var(--line);
+  margin: 6px 12px 0;
 }
 
 @media (max-width: 899px) {
-  .links {
+  .expand {
     display: none;
-  }
-  .actions {
-    margin-left: auto;
   }
   .menuBtn {
     display: inline-flex;
   }
-  .actions > .lang {
-    display: none;
+  .island[data-open="true"] {
+    width: calc(100vw - 24px);
+    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.97);
+  }
+  .island[data-open="true"] .status {
+    grid-template-columns: 0fr;
+    opacity: 0;
   }
 }
 
 @media (min-width: 900px) {
-  .menu {
-    display: none !important;
+  .panel {
+    display: none;
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 359px) {
   .cta {
     display: none;
   }

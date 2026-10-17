@@ -75,7 +75,7 @@ const fragmentShader = /* glsl */ `
 
 const tex = (s: Sprite) => {
   const t = new THREE.CanvasTexture(s.canvas);
-  t.anisotropy = 8;
+  t.anisotropy = 16;
   return t;
 };
 

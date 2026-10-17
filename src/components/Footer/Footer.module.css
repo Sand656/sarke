@@ -59,14 +59,30 @@
   font-weight: 600;
   letter-spacing: -0.07em;
   line-height: 0.78;
-  color: var(--ink);
+  /* Dark at the top, brightest where the word meets its reflection */
+  --wm-top: #2c2c30;
+  --wm-bottom: #f5f5f7;
   user-select: none;
+}
+:global(:root[data-theme="light"]) .wordmark {
+  --wm-top: #d2d2d7;
+  --wm-bottom: #1d1d1f;
+}
+
+.word,
+.reflection {
+  color: transparent;
+  background: linear-gradient(to bottom, var(--wm-top) 8%, var(--wm-bottom) 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* Tight tracking pushes the last glyph past the box: pad so the gradient covers it */
+  padding: 0 0.08em;
 }
 
 /* Mask is applied before the flip, so its opaque end sits against the original word */
 .reflection {
   transform: scaleY(-1);
-  opacity: 0.22;
+  opacity: 0.32;
   margin-top: 0.04em;
   margin-bottom: -0.42em;
   -webkit-mask-image: linear-gradient(to bottom, transparent 45%, #000 100%);

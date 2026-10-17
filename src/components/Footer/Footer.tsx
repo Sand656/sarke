@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { RELEASES_URL, REPO_URL } from "@/config";
+import { RELEASES_URL, REPO_URL, isRepoConfigured } from "@/config";
 import { useLang } from "@/i18n/LangProvider";
 import styles from "./Footer.module.css";
 
@@ -18,16 +18,20 @@ export function Footer() {
         <nav className={styles.col} aria-label={t.footer.links} data-reveal>
           <p className="label">{t.footer.links}</p>
           <ul className={styles.links}>
-            <li>
-              <a href={REPO_URL} className="u-link">
-                {t.footer.github}
-              </a>
-            </li>
-            <li>
-              <a href={RELEASES_URL} className="u-link">
-                {t.footer.releases}
-              </a>
-            </li>
+            {isRepoConfigured && (
+              <>
+                <li>
+                  <a href={REPO_URL} className="u-link">
+                    {t.footer.github}
+                  </a>
+                </li>
+                <li>
+                  <a href={RELEASES_URL} className="u-link">
+                    {t.footer.releases}
+                  </a>
+                </li>
+              </>
+            )}
             <li>
               <Link href="/docs" className="u-link">
                 {t.footer.docs}
@@ -48,7 +52,7 @@ export function Footer() {
 
       {/* The name returns at full width, reflected like the product's name says */}
       <div className={styles.wordmark} aria-hidden="true">
-        <span>Sarke</span>
+        <span className={styles.word}>Sarke</span>
         <span className={styles.reflection}>Sarke</span>
       </div>
     </footer>

@@ -71,7 +71,7 @@ const Keys = () => (
 
 const Portable = () => (
   <div className={styles.vPortable} aria-hidden="true">
-    {["kvm_host.exe", "kvm_client.exe", "config.json"].map((f) => (
+    {["sarke_host.exe", "sarke_client.exe", "config.json"].map((f) => (
       <code key={f} className={styles.chip}>
         {f}
       </code>

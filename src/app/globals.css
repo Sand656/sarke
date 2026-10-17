@@ -95,7 +95,7 @@
   --r-lg: 28px;
   --r-xl: 30px;
 
-  --nav-h: 52px;
+  --nav-h: 72px; /* floating island (48px) + its offset and breathing room */
   --container: 1120px;
   --gutter: 24px;
   --pad-x: 32px;
