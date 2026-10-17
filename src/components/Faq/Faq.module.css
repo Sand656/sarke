@@ -28,11 +28,8 @@
   display: none;
 }
 
-.summary {
-  transition: padding-left var(--t-smooth) var(--ease-out);
-}
-.summary:hover {
-  padding-left: var(--s-8);
+.summary:hover .q {
+  transform: translateX(var(--s-8));
 }
 .summary:hover .q {
   color: var(--accent-ink);
@@ -48,7 +45,9 @@
   font-size: 16px;
   font-weight: 700;
   line-height: 1.4;
-  transition: color var(--t-ui) linear;
+  transition:
+    color var(--dur-normal) var(--ease-out),
+    transform var(--dur-normal) var(--ease-out);
 }
 
 /* Plus / minus drawn with hairlines */
@@ -102,5 +101,11 @@
   }
   .a {
     padding-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .summary:hover .q {
+    transform: none;
   }
 }

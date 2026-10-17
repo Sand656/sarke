@@ -146,3 +146,9 @@
     stroke-dashoffset: -16;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .lan {
+    animation: none;
+  }
+}

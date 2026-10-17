@@ -92,3 +92,12 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transform: none;
+  }
+  .card:hover .status {
+    animation: none;
+  }
+}

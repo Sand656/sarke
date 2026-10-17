@@ -68,8 +68,8 @@ function Skeleton() {
     <div className={styles.readouts} role="status" aria-label={t.download.loading}>
       {[0, 1, 2, 3, 4].map((i) => (
         <div key={i} className={styles.readoutRow} aria-hidden="true">
-          <span className={styles.bar} style={{ width: 72 }} />
-          <span className={styles.bar} style={{ width: i === 4 ? 200 : 112 }} />
+          <span className={`shimmer ${styles.bar}`} style={{ width: 72 }} />
+          <span className={`shimmer ${styles.bar}`} style={{ width: i === 4 ? 200 : 112 }} />
         </div>
       ))}
     </div>

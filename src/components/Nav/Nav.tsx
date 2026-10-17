@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle/ThemeToggle";
 import { useLang, type Lang } from "@/i18n/LangProvider";
 import { setScrollLocked, smoothScrollTo } from "@/lib/smooth";
@@ -21,6 +21,23 @@ const LINKS = [
 export function Nav() {
   const { t, lang, setLang } = useLang();
   const [open, setOpen] = useState(false);
+  // Keeps the menu mounted while its exit animation plays
+  const [closing, setClosing] = useState(false);
+  const closeTimer = useRef<number | undefined>(undefined);
+
+  const closeMenu = useCallback(() => {
+    if (!open) return;
+    setOpen(false);
+    setClosing(true);
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setClosing(false), 260);
+  }, [open]);
+
+  function openMenu() {
+    window.clearTimeout(closeTimer.current);
+    setClosing(false);
+    setOpen(true);
+  }
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -55,7 +72,7 @@ export function Nav() {
     menuRef.current?.querySelector<HTMLElement>("a")?.focus();
 
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") closeMenu();
       if (e.key !== "Tab" || !menuRef.current) return;
       const items = [toggle, ...menuRef.current.querySelectorAll<HTMLElement>("a, button")].filter(
         (el): el is HTMLElement => !!el,
@@ -77,7 +94,7 @@ export function Nav() {
       document.removeEventListener("keydown", onKey);
       toggle?.focus();
     };
-  }, [open]);
+  }, [open, closeMenu]);
 
   const langToggle = (
     <div className={styles.lang} role="group" aria-label={t.nav.language}>
@@ -116,7 +133,7 @@ export function Nav() {
             // Already on the home page: glide back to the top instead of navigating.
             if (pathname !== "/") return;
             e.preventDefault();
-            setOpen(false);
+            closeMenu();
             smoothScrollTo(0);
             history.replaceState(null, "", "/");
           }}
@@ -151,7 +168,7 @@ export function Nav() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? t.nav.menuClose : t.nav.menuOpen}
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => (open ? closeMenu() : openMenu())}
           >
             <span className={styles.bars} data-open={open} aria-hidden="true">
               <span />
@@ -161,7 +178,13 @@ export function Nav() {
         </div>
       </div>
 
-      <div id="mobile-menu" ref={menuRef} className={styles.menu} hidden={!open}>
+      <div
+        id="mobile-menu"
+        ref={menuRef}
+        className={styles.menu}
+        data-state={open ? "open" : closing ? "closing" : "closed"}
+        hidden={!open && !closing}
+      >
         <nav className="container" aria-label={t.nav.primary}>
           <ul className={styles.menuList}>
             {LINKS.map((l) => (
@@ -170,7 +193,7 @@ export function Nav() {
                   href={l.href}
                   className={`h2 ${styles.menuLink}`}
                   aria-current={isActive(l.key) ? (l.key === "docs" ? "page" : "location") : undefined}
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                 >
                   {t.nav[l.key]}
                 </Link>

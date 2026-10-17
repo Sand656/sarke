@@ -34,6 +34,9 @@ export function CopyButton({ value, label }: Props) {
       onClick={copy}
       aria-label={state === "idle" ? (label ?? t.common.copy) : text}
     >
+      <svg className={styles.check} viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+        <path d="M2 6.5 5 9.5 10 3" pathLength={1} />
+      </svg>
       {text}
       <span className="sr-only" aria-live="polite">
         {state === "idle" ? "" : text}

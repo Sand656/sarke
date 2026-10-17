@@ -149,3 +149,9 @@
     padding: var(--s-16);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage .frame {
+    transform: none;
+  }
+}

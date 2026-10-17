@@ -1,4 +1,8 @@
 .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-4);
   flex: none;
   height: 32px;
   min-width: 72px;
@@ -10,13 +14,45 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   transition:
-    background-color var(--t-ui) linear,
-    color var(--t-ui) linear,
-    border-color var(--t-ui) linear;
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform 120ms var(--ease-out);
 }
 
 .button:hover {
   background: var(--bg2);
+}
+
+.button:active {
+  transform: scale(0.96);
+}
+
+/* Check mark draws itself (stroke-dashoffset) when copied */
+.check {
+  width: 0;
+  overflow: visible;
+  transition: width var(--dur-normal) var(--ease-out);
+}
+.check path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease-out) 80ms;
+}
+.button[data-state="copied"] .check {
+  width: 12px;
+}
+.button[data-state="copied"] .check path {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:active {
+    transform: none;
+  }
 }
 
 .button[data-state="copied"] {

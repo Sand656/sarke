@@ -156,33 +156,47 @@
   display: block;
   padding: var(--s-16) 0;
   transition:
-    color var(--t-smooth) var(--ease-out),
-    padding-left var(--t-smooth) var(--ease-out);
+    color var(--dur-normal) var(--ease-out),
+    transform var(--dur-normal) var(--ease-out);
 }
 .menuLink:hover,
 .menuLink[aria-current] {
   color: var(--accent-ink);
-  padding-left: var(--s-12);
+  transform: translateX(var(--s-12));
 }
 
-/* Menu opens with a wipe; links follow in a stagger */
-.menu:not([hidden]) {
-  animation: menu-in 420ms var(--ease-out) both;
+/* Menu opens with a wipe (ease-out) and links stagger in 40ms apart;
+   it closes faster with ease-in, as exits should */
+.menu[data-state="open"] {
+  animation: menu-in var(--dur-slow) var(--ease-out) both;
 }
-.menu:not([hidden]) .menuList li {
-  animation: fade-up 520ms var(--ease-out) both;
+.menu[data-state="closing"] {
+  animation: menu-out 240ms var(--ease-in) both;
 }
-.menu:not([hidden]) .menuList li:nth-child(2) {
-  animation-delay: 50ms;
+.menu[data-state="open"] .menuList li {
+  animation: fade-up var(--dur-slow) var(--ease-out) both;
 }
-.menu:not([hidden]) .menuList li:nth-child(3) {
-  animation-delay: 100ms;
+.menu[data-state="open"] .menuList li:nth-child(2) {
+  animation-delay: 40ms;
 }
-.menu:not([hidden]) .menuList li:nth-child(4) {
-  animation-delay: 150ms;
+.menu[data-state="open"] .menuList li:nth-child(3) {
+  animation-delay: 80ms;
 }
-.menu:not([hidden]) .menuList li:nth-child(5) {
-  animation-delay: 200ms;
+.menu[data-state="open"] .menuList li:nth-child(4) {
+  animation-delay: 120ms;
+}
+.menu[data-state="open"] .menuList li:nth-child(5) {
+  animation-delay: 160ms;
+}
+@keyframes menu-out {
+  from {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
 }
 @keyframes menu-in {
   from {
@@ -242,5 +256,39 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes menu-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes menu-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu[data-state="open"] {
+    animation: menu-fade-in var(--dur-normal) linear both;
+  }
+  .menu[data-state="closing"] {
+    animation: menu-fade-out var(--dur-fast) linear both;
+  }
+  .menu[data-state="open"] .menuList li {
+    animation: none;
+  }
+  .menuLink:hover,
+  .menuLink[aria-current] {
+    transform: none;
+  }
+  .square,
+  .bars span {
+    transition: none;
   }
 }

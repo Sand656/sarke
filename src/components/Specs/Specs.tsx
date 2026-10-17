@@ -10,7 +10,7 @@ export function Specs() {
   const r = t.specs.rows;
 
   let size: React.ReactNode = t.specs.unavailable;
-  if (release.status === "loading") size = <span className={styles.skeleton} aria-label={t.download.loading} />;
+  if (release.status === "loading") size = <span className={`shimmer ${styles.skeleton}`} aria-label={t.download.loading} />;
   else if (release.status === "ok" && release.data.sizeBytes !== null) size = formatMB(release.data.sizeBytes);
 
   const rows: [string, React.ReactNode, string?][] = [

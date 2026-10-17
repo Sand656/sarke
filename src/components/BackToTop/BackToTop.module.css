@@ -75,3 +75,10 @@
     bottom: var(--s-16);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button:hover .arrow {
+    transform: none;
+  }
+}

@@ -136,3 +136,22 @@ html[lang="ka"] .tagline {
     transform: translateY(0);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .char {
+    animation: fade-in-local 700ms var(--ease-out) both;
+    animation-delay: var(--d, 0ms);
+  }
+  .caret {
+    animation: none;
+  }
+}
+
+@keyframes fade-in-local {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

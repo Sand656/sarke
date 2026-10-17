@@ -37,10 +37,7 @@ type ViewTransitionDoc = Document & {
 export function switchTheme(next: Theme) {
   const doc = document as ViewTransitionDoc;
   const root = document.documentElement;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    applyTheme(next);
-    return;
-  }
+  // A crossfade is opacity-only, which is safe under prefers-reduced-motion too.
   if (doc.startViewTransition) {
     doc.startViewTransition(() => applyTheme(next));
     return;

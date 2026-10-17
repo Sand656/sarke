@@ -96,3 +96,9 @@
     top: 20px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .item:hover .box {
+    transform: none;
+  }
+}

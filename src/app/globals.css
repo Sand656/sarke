@@ -55,6 +55,12 @@
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --t-smooth: 360ms;
+  /* Motion tokens (ui-animation): fast hover, standard UI, slow complex, deliberate hero */
+  --dur-fast: 150ms;
+  --dur-normal: 250ms;
+  --dur-slow: 400ms;
+  --dur-deliberate: 700ms;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --r-xs: 4px;
   --r-sm: 6px;
   --r-md: 10px;
@@ -367,8 +373,15 @@ html[lang="ka"] .h2 {
   transform: scaleX(1);
   transform-origin: left center;
 }
+/* Press feedback: quick squeeze, eased release */
 .btn:active {
-  transform: translateY(1px);
+  transform: scale(0.97);
+  transition-duration: 60ms;
+}
+.btn,
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .btn-primary {
@@ -519,6 +532,36 @@ html.theme-fade *::after {
   animation-delay: var(--d, 0ms);
 }
 
+/* ---------- Page transition (app/template.tsx) ---------- */
+.page-enter {
+  animation: page-in var(--dur-deliberate) var(--ease-out) both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Loading skeleton shimmer ---------- */
+.shimmer {
+  background: linear-gradient(90deg, var(--bg2) 25%, var(--line-strong) 50%, var(--bg2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
 /* ---------- Smooth <details> open/close where supported ---------- */
 details::details-content {
   block-size: 0;
@@ -531,15 +574,28 @@ details[open]::details-content {
   block-size: auto;
 }
 
-/* ---------- Reduced motion ---------- */
+/* ---------- Reduced motion ----------
+   Following ui-animation: keep opacity fades and color transitions (safe),
+   drop movement, parallax, spinning and auto-playing loops. Component styles
+   carry their own overrides for the motion they own. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
+  .intro-up {
+    animation-name: fade-in;
+    animation-duration: 600ms;
+  }
+  .page-enter {
+    animation-name: fade-in;
+  }
+  .shimmer {
+    animation: none;
+  }
+  .btn:active {
+    transform: none;
+  }
+  .btn::before {
+    transition-duration: var(--dur-fast);
   }
 }
