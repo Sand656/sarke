@@ -137,14 +137,13 @@ html[lang="ka"] .tagline {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .char {
-    animation: fade-in-local 700ms var(--ease-out) both;
-    animation-delay: var(--d, 0ms);
-  }
-  .caret {
-    animation: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .char {
+  animation: fade-in-local 700ms var(--ease-out) both;
+  animation-delay: var(--d, 0ms);
+}
+:global(:root[data-motion="reduced"]) .caret {
+  animation: none;
 }
 
 @keyframes fade-in-local {

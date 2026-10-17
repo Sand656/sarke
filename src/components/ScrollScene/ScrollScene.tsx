@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "@/lib/motion";
 import styles from "./ScrollScene.module.css";
 
 /**
- * Site-wide 3D backdrop: wireframe models placed along a path the camera flies through
- * as the page scrolls. Rotation is a mix of time (idle drift) and scroll (scroll-triggered).
+ * Site-wide 3D backdrop: wireframe models floating through an endless tunnel. They drift
+ * toward the viewer all the time, scrolling flies the camera faster and spins them, and a
+ * warp intro plays on load and whenever you return to the top. Motion off: a still frame.
  * Plain canvas 2D, fixed behind the content.
  */
 
@@ -92,22 +94,27 @@ function laptop(w: number): Model {
 
 type Body = { model: Model; pos: V3; spin: V3; scroll: V3; accent?: boolean };
 
-// Placed along the flight path; x alternates sides so the reading column stays clear.
+// An endless tunnel: z positions loop over RANGE, so models are always floating in view.
+// x/y keep to the sides and corners so the reading column stays clear.
+const RANGE = 66;
 const BODIES: Body[] = [
-  { model: monitor(2.6), pos: [-4.4, 0.6, 8], spin: [0.05, 0.22, 0], scroll: [0.4, 2.2, 0] },
-  { model: icosahedron(1.1), pos: [4.6, -0.8, 13], spin: [0.18, 0.24, 0.05], scroll: [1.5, 2.5, 0.4], accent: true },
-  { model: laptop(2.4), pos: [-4.8, -1.2, 19], spin: [0.04, 0.2, 0], scroll: [0.3, 2.8, 0] },
-  { model: box(1.4, 1.4, 1.4), pos: [4.4, 1.2, 25], spin: [0.2, 0.15, 0.1], scroll: [2, 1.6, 0.6] },
-  { model: rings(1.2), pos: [-4.2, 1.0, 31], spin: [0.25, 0.3, 0], scroll: [1.2, 2, 0], accent: true },
-  { model: monitor(3), pos: [4.8, 0.2, 37], spin: [0.05, -0.2, 0], scroll: [0.3, -2.4, 0] },
-  { model: octahedron(1.2), pos: [-4.6, -0.9, 43], spin: [0.2, 0.3, 0.1], scroll: [1.6, 2.4, 0.5] },
-  { model: laptop(2.6), pos: [4.5, -1.3, 49], spin: [0.04, -0.22, 0], scroll: [0.3, -2.6, 0] },
-  { model: icosahedron(1.3), pos: [-4.3, 0.9, 55], spin: [0.15, 0.2, 0.08], scroll: [1.4, 2, 0.4] },
-  { model: box(2, 1.1, 1.1), pos: [4.4, 0.6, 61], spin: [0.12, 0.25, 0], scroll: [1, 2.2, 0], accent: true },
-  { model: rings(1.4), pos: [-4.6, -0.4, 67], spin: [0.2, 0.25, 0], scroll: [1.4, 1.8, 0] },
+  { model: monitor(2.6), pos: [-4.6, 0.7, 0], spin: [0.05, 0.22, 0], scroll: [0.4, 2.2, 0] },
+  { model: icosahedron(1.1), pos: [4.7, -0.9, 6], spin: [0.18, 0.24, 0.05], scroll: [1.5, 2.5, 0.4], accent: true },
+  { model: laptop(2.4), pos: [-4.9, -1.4, 12], spin: [0.04, 0.2, 0], scroll: [0.3, 2.8, 0] },
+  { model: box(1.4, 1.4, 1.4), pos: [4.4, 1.5, 18], spin: [0.2, 0.15, 0.1], scroll: [2, 1.6, 0.6] },
+  { model: rings(1.2), pos: [-4.1, 1.6, 24], spin: [0.25, 0.3, 0], scroll: [1.2, 2, 0], accent: true },
+  { model: monitor(3), pos: [4.9, 0.1, 30], spin: [0.05, -0.2, 0], scroll: [0.3, -2.4, 0] },
+  { model: octahedron(1.2), pos: [-4.6, -1.1, 36], spin: [0.2, 0.3, 0.1], scroll: [1.6, 2.4, 0.5] },
+  { model: laptop(2.6), pos: [4.6, -1.5, 42], spin: [0.04, -0.22, 0], scroll: [0.3, -2.6, 0] },
+  { model: icosahedron(1.3), pos: [-4.3, 1.2, 48], spin: [0.15, 0.2, 0.08], scroll: [1.4, 2, 0.4] },
+  { model: box(2, 1.1, 1.1), pos: [4.5, 0.8, 54], spin: [0.12, 0.25, 0], scroll: [1, 2.2, 0], accent: true },
+  { model: rings(1.4), pos: [-4.7, -0.5, 60], spin: [0.2, 0.25, 0], scroll: [1.4, 1.8, 0] },
 ];
-const PATH_START = 4;
-const PATH_END = 64;
+const NEAR = 1.2;
+const DRIFT = 0.45; // world units per second: the idle float toward the viewer
+const SCROLL_FLY = 0.006; // world units per scrolled pixel
+const INTRO_MS = 2200;
+const STREAKS = 28;
 
 function rotate([x, y, z]: V3, [ax, ay, az]: V3): V3 {
   let cy = Math.cos(ax), sy = Math.sin(ax);
@@ -121,25 +128,29 @@ function rotate([x, y, z]: V3, [ax, ay, az]: V3): V3 {
   return [x, y, z];
 }
 
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smoothstep = (a: number, b: number, v: number) => {
-  const t = Math.min(1, Math.max(0, (v - a) / (b - a)));
+  const t = clamp01((v - a) / (b - a));
   return t * t * (3 - 2 * t);
 };
+const easeOutExpo = (t: number) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
 export function ScrollScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let w = 0, h = 0, raf = 0;
-    let camZ = PATH_START;
+    let camZ = 0;
     let lastScroll = window.scrollY;
     let velocity = 0;
     let spinBoost = 0;
+    let introStart = performance.now();
+    let wasAway = window.scrollY > innerHeight * 0.6;
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
     let colors = { line: "#8a8a92", accent: "#ff5a1f" };
     const start = performance.now();
@@ -157,50 +168,79 @@ export function ScrollScene() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    function frame(now: number) {
-      raf = requestAnimationFrame(frame);
+    function draw(now: number, still: boolean) {
       const t = (now - start) / 1000;
-      const max = Math.max(1, document.documentElement.scrollHeight - h);
-      const progress = Math.min(1, window.scrollY / max);
+      const scrollY = window.scrollY;
 
-      // Camera glides toward its scroll position (extra smoothing on top of Lenis)
-      camZ += (PATH_START + progress * (PATH_END - PATH_START) - camZ) * 0.08;
-      velocity += (window.scrollY - lastScroll - velocity) * 0.1;
-      lastScroll = window.scrollY;
-      spinBoost += velocity * 0.0004;
-      pointer.x += (pointer.tx - pointer.x) * 0.04;
-      pointer.y += (pointer.ty - pointer.y) * 0.04;
+      if (!still) {
+        // Back at the top after being away: replay the warp intro
+        if (scrollY > h * 0.6) wasAway = true;
+        else if (wasAway && scrollY < 8) {
+          wasAway = false;
+          introStart = now;
+        }
+        const target = t * DRIFT + scrollY * SCROLL_FLY;
+        camZ += (target - camZ) * 0.08; // extra glide on top of Lenis
+        velocity += (scrollY - lastScroll - velocity) * 0.1;
+        spinBoost += velocity * 0.0004;
+        pointer.x += (pointer.tx - pointer.x) * 0.04;
+        pointer.y += (pointer.ty - pointer.y) * 0.04;
+      } else {
+        camZ = scrollY * SCROLL_FLY;
+      }
+      lastScroll = scrollY;
 
-      // Fade in once the hero (which has its own field) is mostly scrolled past
-      canvas!.style.opacity = String(smoothstep(h * 0.25, h * 0.8, window.scrollY));
+      const introRaw = still ? 1 : clamp01((now - introStart) / INTRO_MS);
+      const progress = Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - h));
+      // Quieter behind the hero, which has its own 3D field
+      const zoneAlpha = 0.6 + 0.4 * smoothstep(0, h * 0.7, scrollY);
 
       ctx!.clearRect(0, 0, w, h);
       const f = Math.min(w * 0.9, h * 1.1);
       const cx = w / 2 + pointer.x * 30;
       const cy = h / 2 + pointer.y * 20;
-      const camX = pointer.x * 0.5 + Math.sin(t * 0.13) * 0.25;
-      const camY = -pointer.y * 0.3 + Math.sin(t * 0.11) * 0.15;
-      // Narrow screens: push models further out so they frame the content
+      const camX = pointer.x * 0.5 + (still ? 0 : Math.sin(t * 0.13) * 0.25);
+      const camY = -pointer.y * 0.3 + (still ? 0 : Math.sin(t * 0.11) * 0.15);
       const spread = w < 640 ? 0.75 : 1;
 
+      // Warp streaks radiating from the vanishing point during the intro
+      if (introRaw < 1) {
+        const k = 1 - easeOutExpo(introRaw);
+        ctx!.strokeStyle = colors.line;
+        ctx!.globalAlpha = 0.35 * k;
+        ctx!.beginPath();
+        for (let i = 0; i < STREAKS; i++) {
+          const a = (i / STREAKS) * Math.PI * 2 + i * 0.37;
+          const r0 = (60 + ((i * 53) % 90)) * (1 + introRaw * 6);
+          const r1 = r0 + 120 + ((i * 31) % 160);
+          ctx!.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
+          ctx!.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+        }
+        ctx!.stroke();
+      }
+
       ctx!.lineWidth = 1;
-      for (const b of BODIES) {
-        const rz = b.pos[2] - camZ;
-        if (rz < 0.6 || rz > 26) continue;
-        const alpha = smoothstep(0.6, 3, rz) * (1 - smoothstep(14, 26, rz));
-        if (alpha <= 0.01) continue;
+      BODIES.forEach((b, index) => {
+        // Staggered burst out of the vanishing point
+        const intro = still ? 1 : easeOutExpo(clamp01((now - introStart - index * 70) / (INTRO_MS - 600)));
+
+        const rel = (((b.pos[2] - camZ) % RANGE) + RANGE) % RANGE;
+        const rz = rel + NEAR + (1 - intro) * 10;
+        const alpha = smoothstep(NEAR, NEAR + 2.5, rz) * (1 - smoothstep(26, 40, rz)) * intro * zoneAlpha;
+        if (alpha <= 0.01) return;
+
         const angle: V3 = [
-          t * b.spin[0] + progress * b.scroll[0] + spinBoost * 0.3,
-          t * b.spin[1] + progress * b.scroll[1] + spinBoost,
+          t * b.spin[0] + progress * b.scroll[0] + spinBoost * 0.3 + (1 - intro) * 2.5,
+          t * b.spin[1] + progress * b.scroll[1] + spinBoost + (1 - intro) * 4,
           t * b.spin[2] + progress * b.scroll[2],
         ];
-        const bob = Math.sin(t * 0.6 + b.pos[2]) * 0.15;
+        const bob = still ? 0 : Math.sin(t * 0.6 + b.pos[2]) * 0.18;
+        const px = b.pos[0] * spread * intro;
+        const py = (b.pos[1] + bob) * intro;
         const pts = b.model.verts.map((v) => {
           const [x, y, z] = rotate(v, angle);
           const Z = rz + z;
-          return Z <= 0.2
-            ? null
-            : { x: cx + ((x + b.pos[0] * spread - camX) / Z) * f, y: cy - ((y + b.pos[1] + bob - camY) / Z) * f };
+          return Z <= 0.2 ? null : { x: cx + ((x + px - camX) / Z) * f, y: cy - ((y + py - camY) / Z) * f };
         });
 
         ctx!.strokeStyle = b.accent ? colors.accent : colors.line;
@@ -214,30 +254,44 @@ export function ScrollScene() {
         }
         ctx!.stroke();
 
-        // Vertex dots
         ctx!.fillStyle = b.accent ? colors.accent : colors.line;
         ctx!.globalAlpha = alpha * 0.7;
         for (const p of pts) if (p) ctx!.fillRect(p.x - 1, p.y - 1, 2, 2);
-      }
+      });
       ctx!.globalAlpha = 1;
     }
 
+    const loop = (now: number) => {
+      draw(now, false);
+      raf = requestAnimationFrame(loop);
+    };
+    const drawStill = () => draw(performance.now(), true);
+
     readColors();
     resize();
-    raf = requestAnimationFrame(frame);
+    if (reduced) drawStill();
+    else raf = requestAnimationFrame(loop);
 
-    const onResize = () => resize();
+    const onResize = () => {
+      resize();
+      if (reduced) drawStill();
+    };
+    const onScroll = () => reduced && drawStill();
     const onPointer = (e: PointerEvent) => {
       pointer.tx = (e.clientX / innerWidth) * 2 - 1;
       pointer.ty = (e.clientY / innerHeight) * 2 - 1;
     };
     const onVisibility = () => {
       cancelAnimationFrame(raf);
-      if (!document.hidden) raf = requestAnimationFrame(frame);
+      if (!document.hidden && !reduced) raf = requestAnimationFrame(loop);
     };
-    const mo = new MutationObserver(readColors);
+    const mo = new MutationObserver(() => {
+      readColors();
+      if (reduced) drawStill();
+    });
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     addEventListener("resize", onResize);
+    addEventListener("scroll", onScroll, { passive: true });
     addEventListener("pointermove", onPointer, { passive: true });
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -245,10 +299,11 @@ export function ScrollScene() {
       cancelAnimationFrame(raf);
       mo.disconnect();
       removeEventListener("resize", onResize);
+      removeEventListener("scroll", onScroll);
       removeEventListener("pointermove", onPointer);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, []);
+  }, [reduced]);
 
   return <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />;
 }

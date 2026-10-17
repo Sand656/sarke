@@ -6,7 +6,8 @@ import { GEOMETRY, buildSceneTimeline } from "@/components/DeskScene/scene";
 import { useLang } from "@/i18n/LangProvider";
 import { useGsapEffect } from "@/lib/gsap";
 import { useRelease } from "@/lib/release";
-import { useMediaQuery, usePrefersReducedMotion } from "@/lib/useMediaQuery";
+import { useReducedMotion } from "@/lib/motion";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { MirrorField } from "@/components/MirrorField/MirrorField";
 import styles from "./Hero.module.css";
 
@@ -16,7 +17,7 @@ export function Hero() {
   const { t } = useLang();
   const release = useRelease();
   const stacked = useMediaQuery("(max-width: 639px)");
-  const reduced = usePrefersReducedMotion();
+  const reduced = useReducedMotion();
   const sceneRef = useRef<SVGSVGElement>(null);
   const layout = stacked ? "stack" : "row";
 

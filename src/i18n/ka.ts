@@ -30,6 +30,9 @@ const ka: Dict = {
     themeLight: "ღია თემაზე გადართვა",
     themeDark: "მუქ თემაზე გადართვა",
     backToTop: "ზემოთ დაბრუნება",
+    motion: "ანიმაციები",
+    motionTurnOff: "ანიმაციების გამორთვა",
+    motionTurnOn: "ანიმაციების ჩართვა",
   },
   hero: {
     label: "Windows 10/11",

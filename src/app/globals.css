@@ -534,7 +534,8 @@ html.theme-fade *::after {
 
 /* ---------- Page transition (app/template.tsx) ---------- */
 .page-enter {
-  animation: page-in var(--dur-deliberate) var(--ease-out) both;
+  /* "backwards", not "both": a lingering transform would break position:fixed pins inside */
+  animation: page-in var(--dur-deliberate) var(--ease-out) backwards;
 }
 @keyframes page-in {
   from {
@@ -578,24 +579,23 @@ details[open]::details-content {
    Following ui-animation: keep opacity fades and color transitions (safe),
    drop movement, parallax, spinning and auto-playing loops. Component styles
    carry their own overrides for the motion they own. */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .intro-up {
-    animation-name: fade-in;
-    animation-duration: 600ms;
-  }
-  .page-enter {
-    animation-name: fade-in;
-  }
-  .shimmer {
-    animation: none;
-  }
-  .btn:active {
-    transform: none;
-  }
-  .btn::before {
-    transition-duration: var(--dur-fast);
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:root[data-motion="reduced"] {
+  scroll-behavior: auto;
+}
+:root[data-motion="reduced"] .intro-up {
+  animation-name: fade-in;
+  animation-duration: 600ms;
+}
+:root[data-motion="reduced"] .page-enter {
+  animation-name: fade-in;
+}
+:root[data-motion="reduced"] .shimmer {
+  animation: none;
+}
+:root[data-motion="reduced"] .btn:active {
+  transform: none;
+}
+:root[data-motion="reduced"] .btn::before {
+  transition-duration: var(--dur-fast);
 }

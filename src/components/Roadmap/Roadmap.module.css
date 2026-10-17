@@ -97,8 +97,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .item:hover .box {
-    transform: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .item:hover .box {
+  transform: none;
 }

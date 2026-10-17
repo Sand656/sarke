@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "@/lib/motion";
 import styles from "./MirrorField.module.css";
 
 /**
@@ -33,13 +34,13 @@ function readColors(el: Element) {
 
 export function MirrorField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let colors = readColors(canvas);
     let w = 0;
     let h = 0;
@@ -230,7 +231,7 @@ export function MirrorField() {
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("pointermove", onPointer);
     };
-  }, []);
+  }, [reduced]);
 
   return <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />;
 }

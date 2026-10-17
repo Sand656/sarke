@@ -14,31 +14,15 @@
   align-items: center;
 }
 
-/* 3D stage: the frame tilts a little differently on each step */
+/* 3D stage: GSAP sweeps the frame's tilt with the scroll and floats the stage */
 .stage {
   width: 100%;
-  perspective: 1800px;
+  will-change: transform;
 }
 
 .stage .frame {
-  transform: rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
   transform-style: preserve-3d;
-  transition:
-    transform 1400ms var(--ease-out),
-    box-shadow 1400ms var(--ease-out);
-}
-
-.stage[data-active="0"] .frame {
-  --tx: 6deg;
-  --ty: 9deg;
-}
-.stage[data-active="1"] .frame {
-  --tx: 4deg;
-  --ty: 0deg;
-}
-.stage[data-active="2"] .frame {
-  --tx: 6deg;
-  --ty: -9deg;
+  will-change: transform;
 }
 
 .frame {
@@ -150,8 +134,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .stage .frame {
-    transform: none;
-  }
-}

@@ -3,8 +3,15 @@
 import Lenis from "lenis";
 import { useEffect } from "react";
 import { loadGsap } from "@/lib/gsap";
+import { useReducedMotion } from "@/lib/motion";
 
 let lenis: Lenis | null = null;
+let glideFrame = 0;
+
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+/** Quick but readable: ~0.45s for short hops, capped at 0.9s for long trips. */
+const glideDuration = (distance: number) => Math.min(900, 450 + Math.abs(distance) * 0.04);
 
 /** Pauses smooth scrolling (e.g. while a full-screen menu is open). */
 export function setScrollLocked(locked: boolean) {
@@ -12,22 +19,46 @@ export function setScrollLocked(locked: boolean) {
   else lenis?.start();
 }
 
-/** Smoothly scrolls to a y position or element; falls back to native scrolling. */
-export function smoothScrollTo(target: number | HTMLElement) {
-  // Sections carry scroll-margin-top for the sticky nav; both paths below respect it.
-  if (lenis) {
-    lenis.scrollTo(target, { duration: 1.2, force: true });
-    return;
-  }
-  const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-  if (typeof target === "number") window.scrollTo({ top: target, behavior });
-  else target.scrollIntoView({ behavior, block: "start" });
+function resolveTop(target: number | HTMLElement) {
+  if (typeof target === "number") return target;
+  const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+  return target.getBoundingClientRect().top + window.scrollY - margin;
 }
 
-/** Mounts Lenis smooth scrolling (skipped for reduced motion) and smooth in-page anchor links. */
+/**
+ * User-initiated scroll (back to top, logo, anchor links): a short eased glide in every
+ * motion mode — it never jumps. Uses Lenis when it's running, otherwise a rAF animation.
+ */
+export function smoothScrollTo(target: number | HTMLElement) {
+  const top = Math.max(0, resolveTop(target));
+  const distance = top - window.scrollY;
+  const duration = glideDuration(distance);
+
+  if (lenis) {
+    lenis.scrollTo(top, { duration: duration / 1000, easing: easeInOutCubic, force: true });
+    return;
+  }
+
+  cancelAnimationFrame(glideFrame);
+  const from = window.scrollY;
+  const start = performance.now();
+  const cancel = () => cancelAnimationFrame(glideFrame);
+  // The user taking over the wheel/touch stops the glide
+  addEventListener("wheel", cancel, { once: true, passive: true });
+  addEventListener("touchstart", cancel, { once: true, passive: true });
+  const step = (now: number) => {
+    const p = Math.min(1, (now - start) / duration);
+    window.scrollTo({ top: from + distance * easeInOutCubic(p), behavior: "instant" });
+    if (p < 1) glideFrame = requestAnimationFrame(step);
+  };
+  glideFrame = requestAnimationFrame(step);
+}
+
+/** Mounts Lenis inertia scrolling (full motion only) and smooth in-page anchor links. */
 export function SmoothScroll() {
+  const reduced = useReducedMotion();
+
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let cancelled = false;
     let stopTicker: (() => void) | undefined;
 
@@ -45,7 +76,7 @@ export function SmoothScroll() {
       });
     }
 
-    // Same-page anchors (#id or /#id while on "/") scroll smoothly under the sticky nav.
+    // Same-page anchors (#id or /#id while on "/") glide under the sticky nav.
     function onClick(e: MouseEvent) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const link = (e.target as Element).closest?.("a[href*='#']") as HTMLAnchorElement | null;
@@ -68,7 +99,7 @@ export function SmoothScroll() {
       lenis?.destroy();
       lenis = null;
     };
-  }, []);
+  }, [reduced]);
 
   return null;
 }

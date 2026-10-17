@@ -273,22 +273,21 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .menu[data-state="open"] {
-    animation: menu-fade-in var(--dur-normal) linear both;
-  }
-  .menu[data-state="closing"] {
-    animation: menu-fade-out var(--dur-fast) linear both;
-  }
-  .menu[data-state="open"] .menuList li {
-    animation: none;
-  }
-  .menuLink:hover,
-  .menuLink[aria-current] {
-    transform: none;
-  }
-  .square,
-  .bars span {
-    transition: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .menu[data-state="open"] {
+  animation: menu-fade-in var(--dur-normal) linear both;
+}
+:global(:root[data-motion="reduced"]) .menu[data-state="closing"] {
+  animation: menu-fade-out var(--dur-fast) linear both;
+}
+:global(:root[data-motion="reduced"]) .menu[data-state="open"] .menuList li {
+  animation: none;
+}
+:global(:root[data-motion="reduced"]) .menuLink:hover,
+:global(:root[data-motion="reduced"]) .menuLink[aria-current] {
+  transform: none;
+}
+:global(:root[data-motion="reduced"]) .square,
+:global(:root[data-motion="reduced"]) .bars span {
+  transition: none;
 }

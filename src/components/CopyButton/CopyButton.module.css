@@ -49,10 +49,9 @@
   stroke-dashoffset: 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .button:active {
-    transform: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .button:active {
+  transform: none;
 }
 
 .button[data-state="copied"] {

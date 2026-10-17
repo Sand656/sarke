@@ -28,7 +28,7 @@
     transform 500ms var(--ease-out);
 }
 
-/* Spotlight that follows the pointer */
+/* Soft spotlight right under the pointer */
 .card::before {
   content: "";
   position: absolute;
@@ -36,11 +36,41 @@
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(260px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
-  transition: opacity var(--t-smooth) var(--ease-out);
+  background: radial-gradient(
+    180px circle at var(--mx) var(--my),
+    color-mix(in srgb, var(--accent) 7%, transparent),
+    transparent 70%
+  );
+  transition: opacity var(--dur-slow) var(--ease-out);
 }
 
-.card:hover::before {
+/* Border glow: only the stretch of border nearest the pointer lights up */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    120px circle at calc(var(--mx) + 1px) calc(var(--my) + 1px),
+    color-mix(in srgb, var(--accent) 60%, transparent),
+    transparent 75%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.card:hover::before,
+.card:hover::after {
   opacity: 1;
 }
 
@@ -65,7 +95,7 @@
 }
 
 .card:hover {
-  border-color: var(--accent);
+  border-color: color-mix(in srgb, var(--line-strong) 60%, var(--accent) 40%);
 }
 
 .card:hover .status {
@@ -93,11 +123,10 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .card {
-    transform: none;
-  }
-  .card:hover .status {
-    animation: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .card {
+  transform: none;
+}
+:global(:root[data-motion="reduced"]) .card:hover .status {
+  animation: none;
 }

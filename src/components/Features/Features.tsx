@@ -1,23 +1,26 @@
 "use client";
 
 import { useLang } from "@/i18n/LangProvider";
+import { isReducedMotion } from "@/lib/motion";
 import styles from "./Features.module.css";
 
-const canTilt = () =>
-  window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-  !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const canTilt = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches && !isReducedMotion();
 
-/** 3D tilt + spotlight following the pointer. */
+/**
+ * Spotlight + border glow sit exactly under the pointer (in px, so they track precisely).
+ * The glow is light, not motion, so it follows the cursor in every motion mode; the 3D tilt
+ * only runs with full motion.
+ */
 function tilt(e: React.PointerEvent<HTMLElement>) {
-  if (!canTilt()) return;
   const el = e.currentTarget;
   const r = el.getBoundingClientRect();
-  const px = (e.clientX - r.left) / r.width;
-  const py = (e.clientY - r.top) / r.height;
-  el.style.setProperty("--rx", `${(0.5 - py) * 10}deg`);
-  el.style.setProperty("--ry", `${(px - 0.5) * 12}deg`);
-  el.style.setProperty("--mx", `${px * 100}%`);
-  el.style.setProperty("--my", `${py * 100}%`);
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  el.style.setProperty("--mx", `${x}px`);
+  el.style.setProperty("--my", `${y}px`);
+  if (!canTilt()) return;
+  el.style.setProperty("--rx", `${(0.5 - y / r.height) * 8}deg`);
+  el.style.setProperty("--ry", `${(x / r.width - 0.5) * 10}deg`);
 }
 
 function untilt(e: React.PointerEvent<HTMLElement>) {

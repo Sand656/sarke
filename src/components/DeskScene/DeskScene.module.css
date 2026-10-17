@@ -147,8 +147,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .lan {
-    animation: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .lan {
+  animation: none;
 }

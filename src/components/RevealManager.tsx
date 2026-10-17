@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useLang } from "@/i18n/LangProvider";
 import { loadGsap } from "@/lib/gsap";
+import { useReducedMotion } from "@/lib/motion";
 
 /**
  * Scroll reveals for every [data-reveal] element on the page.
@@ -14,10 +15,10 @@ import { loadGsap } from "@/lib/gsap";
 export function RevealManager() {
   const pathname = usePathname();
   const { lang } = useLang();
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     // Reduced motion: opacity-only fades (no rise, no clip wipe, no scale)
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let cancelled = false;
     let revert: (() => void) | undefined;
 
@@ -65,7 +66,7 @@ export function RevealManager() {
       cancelled = true;
       revert?.();
     };
-  }, [pathname]);
+  }, [pathname, reduced]);
 
   // Text length changes with the language — recompute trigger positions.
   useEffect(() => {

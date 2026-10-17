@@ -19,10 +19,9 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .canvas {
-    opacity: 1;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .canvas {
+  opacity: 1;
 }
 
 @keyframes fade-in {

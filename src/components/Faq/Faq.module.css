@@ -104,8 +104,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .summary:hover .q {
-    transform: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .summary:hover .q {
+  transform: none;
 }

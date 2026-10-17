@@ -5,14 +5,15 @@ import { DeskScene } from "@/components/DeskScene/DeskScene";
 import { GEOMETRY, STEP_LABELS, buildSceneTimeline } from "@/components/DeskScene/scene";
 import { useLang } from "@/i18n/LangProvider";
 import { useGsapEffect } from "@/lib/gsap";
-import { useMediaQuery, usePrefersReducedMotion } from "@/lib/useMediaQuery";
+import { useReducedMotion } from "@/lib/motion";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import styles from "./HowItWorks.module.css";
 
 export function HowItWorks() {
   const { t } = useLang();
   const wide = useMediaQuery("(min-width: 960px)");
   const stacked = useMediaQuery("(max-width: 639px)");
-  const reduced = usePrefersReducedMotion();
+  const reduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -25,38 +26,59 @@ export function HowItWorks() {
       const steps = Array.from(section.querySelectorAll<HTMLElement>("[data-step]"));
 
       if (wide) {
-        // One pinned diagram; each step tweens it to that step's label.
-        const svg = pinRef.current?.querySelector("svg");
-        if (!svg) return;
+        const pin = pinRef.current;
+        const svg = pin?.querySelector("svg");
+        const stage = pin?.querySelector<HTMLElement>("[data-stage]");
+        const frame = pin?.querySelector<HTMLElement>("[data-frame]");
+        if (!pin || !svg || !stage || !frame) return;
         const tl = buildSceneTimeline(gsap, svg, GEOMETRY.row, { loop: false });
         tl.seek("start");
-        const goTo = (i: number) => {
-          setActive(i);
-          const label = STEP_LABELS[i + 1];
-          if (reduced) tl.seek(label);
-          else tl.tweenTo(label, { duration: Math.min(1.8, Math.abs(tl.labels[label] - tl.time()) || 0.1), ease: "power2.inOut" });
-        };
         ScrollTrigger.create({
           trigger: section.querySelector("[data-grid]"),
           start: "top top+=64",
           end: "bottom bottom",
-          pin: pinRef.current,
+          pin,
           pinSpacing: false,
         });
-        steps.forEach((step, i) =>
-          ScrollTrigger.create({
-            trigger: step,
-            start: "top 60%",
-            end: "bottom 60%",
-            onToggle: (self) => self.isActive && goTo(i),
-            onLeaveBack: () => {
-              if (i !== 0) return;
-              setActive(0);
-              if (reduced) tl.seek("start");
-              else tl.tweenTo("start");
-            },
-          }),
+
+        if (reduced) {
+          // Motion off: each step shows its finished state, no in-between movement.
+          steps.forEach((step, i) =>
+            ScrollTrigger.create({
+              trigger: step,
+              start: "top 60%",
+              end: "bottom 60%",
+              onToggle: (self) => {
+                if (!self.isActive) return;
+                setActive(i);
+                tl.seek(STEP_LABELS[i + 1]);
+              },
+              onLeaveBack: () => i === 0 && tl.seek("start"),
+            }),
+          );
+          return;
+        }
+
+        // Full motion: the scene plays continuously with the scroll (smoothed scrub),
+        // while the frame's 3D tilt sweeps across and the whole stage floats gently.
+        const span = tl.labels.final - tl.labels.start;
+        const scrubbed = gsap.timeline({
+          scrollTrigger: {
+            trigger: section.querySelector("[data-steps]"),
+            start: "top 65%",
+            end: "bottom 65%",
+            scrub: 1.2,
+            onUpdate: (self) => setActive(Math.min(steps.length - 1, Math.floor(self.progress * steps.length))),
+          },
+        });
+        scrubbed.add(tl.tweenFromTo("start", "final", { ease: "none" }), 0);
+        scrubbed.fromTo(
+          frame,
+          { rotationY: 11, rotationX: 7, transformPerspective: 1800 },
+          { rotationY: -11, rotationX: 5, duration: span, ease: "sine.inOut" },
+          0,
         );
+        gsap.to(stage, { y: -10, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: -1 });
         return;
       }
 
@@ -95,8 +117,8 @@ export function HowItWorks() {
           {wide && (
             <div className={styles.diagramCol}>
               <div ref={pinRef} className={styles.pin}>
-                <div className={styles.stage} data-active={active}>
-                  <div className={styles.frame}>
+                <div className={styles.stage} data-stage>
+                  <div className={styles.frame} data-frame>
                     <div className={styles.frameBar}>
                       <p className="label">
                         {t.how.stepLabel}{" "}
@@ -117,7 +139,7 @@ export function HowItWorks() {
             </div>
           )}
 
-          <ol className={styles.steps}>
+          <ol className={styles.steps} data-steps>
             {t.how.steps.map((s, i) => (
               <li key={s.num} className={styles.step} data-step data-reveal data-current={wide ? i === active : undefined}>
                 {!wide && (

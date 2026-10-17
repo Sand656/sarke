@@ -28,6 +28,9 @@ const en = {
     themeLight: "Switch to light mode",
     themeDark: "Switch to dark mode",
     backToTop: "Back to top",
+    motion: "Animations",
+    motionTurnOff: "Turn animations off",
+    motionTurnOn: "Turn animations on",
   },
   hero: {
     label: "Windows 10/11",

@@ -76,9 +76,8 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .button,
-  .button:hover .arrow {
-    transform: none;
-  }
+/* Reduced motion (OS setting or the site's motion toggle) */
+:global(:root[data-motion="reduced"]) .button,
+:global(:root[data-motion="reduced"]) .button:hover .arrow {
+  transform: none;
 }

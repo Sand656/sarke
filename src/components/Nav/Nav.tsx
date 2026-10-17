@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { MotionToggle } from "@/components/MotionToggle/MotionToggle";
 import { ThemeToggle } from "@/components/ThemeToggle/ThemeToggle";
 import { useLang, type Lang } from "@/i18n/LangProvider";
 import { setScrollLocked, smoothScrollTo } from "@/lib/smooth";
@@ -157,6 +158,7 @@ export function Nav() {
 
         <div className={styles.actions}>
           {langToggle}
+          <MotionToggle />
           <ThemeToggle />
           <Link href="/#download" className={`btn btn-primary ${styles.cta}`}>
             {t.nav.download}
