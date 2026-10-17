@@ -84,18 +84,17 @@ export function Download() {
   return (
     <section id="download" className="section" aria-labelledby="download-title">
       <div className="container">
-        <p className="label" data-reveal>
-            {t.download.label}
-          </p>
-        <div className={styles.panel} data-reveal>
+        <div className={`bezel ${styles.shell}`} data-reveal>
+        <div className={`bezel-core ${styles.panel}`}>
           <div className={styles.left}>
-            <h2 id="download-title" className="h2" data-reveal="mask">
+            <h2 id="download-title" className="h2">
               {t.download.title}
             </h2>
+            <p className="lead">{t.download.intro}</p>
 
             {release.status === "loading" && <Skeleton />}
             {release.status === "ok" && <Readouts data={release.data} />}
-            {release.status === "error" && <p className="label">{t.download.unavailable}</p>}
+            {release.status === "error" && <p className="small">{t.download.unavailable}</p>}
 
             {!isWindows && <p className={`body ${styles.warnNote}`}>{t.download.notWindows}</p>}
 
@@ -114,7 +113,7 @@ export function Download() {
             <ol className={styles.steps}>
               {t.download.steps.map((step, i) => (
                 <li key={i} className={styles.step}>
-                  <span className={`readout ${styles.stepNum}`}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.stepNum}>{i + 1}</span>
                   <div className={styles.stepBody}>
                     <p className="body">{rich(step)}</p>
                     {COMMANDS[i] && <CodeBlock code={COMMANDS[i]} />}
@@ -124,14 +123,15 @@ export function Download() {
             </ol>
           </div>
         </div>
+        </div>
 
         <div className={styles.notices}>
           <div className="notice" data-reveal>
-            <p className="label">{t.download.smartscreenTitle}</p>
+            <p className="h3">{t.download.smartscreenTitle}</p>
             <p className="body">{t.download.smartscreen}</p>
           </div>
           <div className="notice" data-reveal>
-            <p className="label">{t.download.securityTitle}</p>
+            <p className="h3">{t.download.securityTitle}</p>
             <p className="body">{t.download.security}</p>
           </div>
         </div>

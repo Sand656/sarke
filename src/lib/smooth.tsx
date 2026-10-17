@@ -3,7 +3,6 @@
 import Lenis from "lenis";
 import { useEffect } from "react";
 import { loadGsap } from "@/lib/gsap";
-import { useReducedMotion } from "@/lib/motion";
 
 let lenis: Lenis | null = null;
 let glideFrame = 0;
@@ -26,8 +25,8 @@ function resolveTop(target: number | HTMLElement) {
 }
 
 /**
- * User-initiated scroll (back to top, logo, anchor links): a short eased glide in every
- * motion mode — it never jumps. Uses Lenis when it's running, otherwise a rAF animation.
+ * User-initiated scroll (back to top, logo, anchor links): a short eased glide that never
+ * jumps. Uses Lenis when it's running, otherwise a rAF animation.
  */
 export function smoothScrollTo(target: number | HTMLElement) {
   const top = Math.max(0, resolveTop(target));
@@ -54,27 +53,23 @@ export function smoothScrollTo(target: number | HTMLElement) {
   glideFrame = requestAnimationFrame(step);
 }
 
-/** Mounts Lenis inertia scrolling (full motion only) and smooth in-page anchor links. */
+/** Mounts Lenis inertia scrolling and smooth in-page anchor links. */
 export function SmoothScroll() {
-  const reduced = useReducedMotion();
-
   useEffect(() => {
     let cancelled = false;
     let stopTicker: (() => void) | undefined;
 
-    if (!reduced) {
-      lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9, smoothWheel: true, autoRaf: false });
-      // Drive Lenis from GSAP's ticker so ScrollTrigger pins stay in sync.
-      loadGsap().then(({ gsap, ScrollTrigger }) => {
-        if (cancelled || !lenis) return;
-        const instance = lenis;
-        instance.on("scroll", ScrollTrigger.update);
-        const tick = (time: number) => instance.raf(time * 1000);
-        gsap.ticker.add(tick);
-        gsap.ticker.lagSmoothing(0);
-        stopTicker = () => gsap.ticker.remove(tick);
-      });
-    }
+    lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9, smoothWheel: true, autoRaf: false });
+    // Drive Lenis from GSAP's ticker so ScrollTrigger pins stay in sync.
+    loadGsap().then(({ gsap, ScrollTrigger }) => {
+      if (cancelled || !lenis) return;
+      const instance = lenis;
+      instance.on("scroll", ScrollTrigger.update);
+      const tick = (time: number) => instance.raf(time * 1000);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+      stopTicker = () => gsap.ticker.remove(tick);
+    });
 
     // Same-page anchors (#id or /#id while on "/") glide under the sticky nav.
     function onClick(e: MouseEvent) {
@@ -99,7 +94,7 @@ export function SmoothScroll() {
       lenis?.destroy();
       lenis = null;
     };
-  }, [reduced]);
+  }, []);
 
   return null;
 }

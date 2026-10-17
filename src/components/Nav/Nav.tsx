@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { MotionToggle } from "@/components/MotionToggle/MotionToggle";
 import { ThemeToggle } from "@/components/ThemeToggle/ThemeToggle";
 import { useLang, type Lang } from "@/i18n/LangProvider";
 import { setScrollLocked, smoothScrollTo } from "@/lib/smooth";
@@ -43,6 +42,37 @@ export function Nav() {
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Dynamic header: transparent at the top, frosted once you scroll,
+  // slides away while scrolling down and comes back as soon as you scroll up.
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    let last = window.scrollY;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const delta = y - last;
+      header.dataset.scrolled = String(y > 8);
+      if (Math.abs(delta) > 4) {
+        const keep = header.matches(":focus-within") || header.querySelector("[aria-expanded='true']");
+        header.dataset.hidden = String(delta > 0 && y > 360 && !keep);
+        last = y;
+      }
+      if (y < 8) header.dataset.hidden = "false";
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   // Scroll spy: underline the nav link of the section in view.
   useEffect(() => {
@@ -121,11 +151,12 @@ export function Nav() {
   );
 
   return (
-    <header className={styles.nav}>
+    <header ref={headerRef} className={styles.nav} data-scrolled="false" data-hidden="false" data-open={open || undefined}>
       <a href="#main" className="skip-link">
         {t.nav.skip}
       </a>
-      <div className={`container ${styles.inner}`}>
+      <div className={`container ${styles.wrap}`}>
+        <div className={styles.bar}>
         <Link
           href="/"
           className={styles.brand}
@@ -139,8 +170,8 @@ export function Nav() {
             history.replaceState(null, "", "/");
           }}
         >
-          <span className={styles.square} aria-hidden="true" />
-          SARKE
+          <span className={styles.mark} aria-hidden="true" />
+          Sarke
         </Link>
 
         <nav className={styles.links} aria-label={t.nav.primary}>
@@ -148,7 +179,7 @@ export function Nav() {
             <Link
               key={l.key}
               href={l.href}
-              className={`label u-link ${styles.link}`}
+              className={`u-link ${styles.link}`}
               aria-current={isActive(l.key) ? (l.key === "docs" ? "page" : "location") : undefined}
             >
               {t.nav[l.key]}
@@ -158,9 +189,8 @@ export function Nav() {
 
         <div className={styles.actions}>
           {langToggle}
-          <MotionToggle />
           <ThemeToggle />
-          <Link href="/#download" className={`btn btn-primary ${styles.cta}`}>
+          <Link href="/#download" className={styles.cta}>
             {t.nav.download}
           </Link>
           <button
@@ -177,6 +207,7 @@ export function Nav() {
               <span />
             </span>
           </button>
+        </div>
         </div>
       </div>
 

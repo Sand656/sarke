@@ -2,16 +2,16 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const alt = "Sarke — one mouse, one more screen";
+export const alt = "Sarke — every desktop, one cursor";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const fontDir = join(process.cwd(), "node_modules/@fontsource/jetbrains-mono/files");
+const fontDir = join(process.cwd(), "node_modules/geist/dist/fonts/geist-sans");
 
 export default async function OpenGraphImage() {
-  const [regular, bold] = await Promise.all([
-    readFile(join(fontDir, "jetbrains-mono-latin-400-normal.woff")),
-    readFile(join(fontDir, "jetbrains-mono-latin-700-normal.woff")),
+  const [regular, semibold] = await Promise.all([
+    readFile(join(fontDir, "Geist-Regular.ttf")),
+    readFile(join(fontDir, "Geist-SemiBold.ttf")),
   ]);
 
   return new ImageResponse(
@@ -22,39 +22,35 @@ export default async function OpenGraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          padding: 72,
-          background: "#0B0B0C",
-          backgroundImage:
-            "linear-gradient(to right, rgba(42,42,46,0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(42,42,46,0.4) 1px, transparent 1px)",
-          backgroundSize: "96px 96px",
-          fontFamily: "JetBrains Mono",
-          color: "#EDEDED",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 28,
+          background: "#050506",
+          backgroundImage: "radial-gradient(900px 420px at 50% -8%, rgba(90,110,150,0.32), transparent 70%)",
+          fontFamily: "Geist",
+          color: "#f5f5f7",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 22, letterSpacing: 2, color: "#8A8A92" }}>
-          <div style={{ width: 14, height: 14, background: "#FF5A1F" }} />
-          SARKE · WINDOWS 10/11
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-          <div style={{ display: "flex", alignItems: "flex-start", fontSize: 200, fontWeight: 700, lineHeight: 0.9, letterSpacing: -4 }}>
-            SARKE
-            <div style={{ width: 24, height: 144, marginTop: 18, marginLeft: 16, background: "#FF5A1F" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 34, fontWeight: 600 }}>
+          <div style={{ display: "flex", position: "relative", width: 30, height: 30 }}>
+            <div style={{ position: "absolute", left: 0, top: 0, width: 20, height: 20, borderRadius: 5, background: "#f5f5f7" }} />
+            <div style={{ position: "absolute", right: 0, bottom: 0, width: 20, height: 20, borderRadius: 5, border: "3px solid #f5f5f7", background: "#050506" }} />
           </div>
-          <div style={{ fontSize: 44, fontWeight: 700, textTransform: "uppercase" }}>One mouse. One more screen.</div>
+          Sarke
         </div>
-
-        <div style={{ display: "flex", fontSize: 22, letterSpacing: 2, color: "#8A8A92", textTransform: "uppercase" }}>
-          free · open source · LAN only
+        <div style={{ display: "flex", fontSize: 96, fontWeight: 600, letterSpacing: -3, lineHeight: 1.04 }}>
+          Every desktop. One cursor.
+        </div>
+        <div style={{ display: "flex", fontSize: 30, color: "#86868b" }}>
+          Merge two or more Windows PCs into one workspace.
         </div>
       </div>
     ),
     {
       ...size,
       fonts: [
-        { name: "JetBrains Mono", data: regular, weight: 400, style: "normal" },
-        { name: "JetBrains Mono", data: bold, weight: 700, style: "normal" },
+        { name: "Geist", data: regular, weight: 400, style: "normal" },
+        { name: "Geist", data: semibold, weight: 600, style: "normal" },
       ],
     },
   );

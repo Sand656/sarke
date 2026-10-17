@@ -1,33 +1,85 @@
 "use client";
 
 import { useLang } from "@/i18n/LangProvider";
-import { isReducedMotion } from "@/lib/motion";
 import styles from "./Features.module.css";
 
-const canTilt = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches && !isReducedMotion();
-
-/**
- * Spotlight + border glow sit exactly under the pointer (in px, so they track precisely).
- * The glow is light, not motion, so it follows the cursor in every motion mode; the 3D tilt
- * only runs with full motion.
- */
-function tilt(e: React.PointerEvent<HTMLElement>) {
+/** A soft light sits exactly under the pointer. */
+function track(e: React.PointerEvent<HTMLElement>) {
   const el = e.currentTarget;
   const r = el.getBoundingClientRect();
-  const x = e.clientX - r.left;
-  const y = e.clientY - r.top;
-  el.style.setProperty("--mx", `${x}px`);
-  el.style.setProperty("--my", `${y}px`);
-  if (!canTilt()) return;
-  el.style.setProperty("--rx", `${(0.5 - y / r.height) * 8}deg`);
-  el.style.setProperty("--ry", `${(x / r.width - 0.5) * 10}deg`);
+  el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  el.style.setProperty("--my", `${e.clientY - r.top}px`);
 }
 
-function untilt(e: React.PointerEvent<HTMLElement>) {
-  const el = e.currentTarget;
-  el.style.setProperty("--rx", "0deg");
-  el.style.setProperty("--ry", "0deg");
-}
+/* ---------- Small animated scenes, one per tile ---------- */
+
+const Merge = () => (
+  <div className={styles.vMerge} aria-hidden="true">
+    {["a", "b", "c"].map((k) => (
+      <span key={k} className={`${styles.screen} ${styles[`wall_${k}`]}`} />
+    ))}
+    <span className={styles.mergeWindow} />
+    <span className={styles.mergeCursor} />
+  </div>
+);
+
+const Carry = () => (
+  <div className={styles.vCarry} aria-hidden="true">
+    <span className={`${styles.screen} ${styles.wall_a}`} />
+    <span className={`${styles.screen} ${styles.wall_b}`} />
+    <span className={styles.carryWindow} />
+  </div>
+);
+
+const Files = () => (
+  <div className={styles.vFiles} aria-hidden="true">
+    <span className={styles.folder} />
+    <span className={styles.file} />
+  </div>
+);
+
+const Cursor = () => (
+  <div className={styles.vCursor} aria-hidden="true">
+    <span className={`${styles.screen} ${styles.wall_b}`} />
+    <span className={`${styles.screen} ${styles.wall_c}`} />
+    <span className={styles.edge} />
+    <span className={styles.arrow} />
+  </div>
+);
+
+const Hud = () => (
+  <dl className={styles.vHud} aria-hidden="true">
+    {["RTT", "FPS", "LAT", "BITRATE"].map((k, i) => (
+      <div key={k} className={styles.meter}>
+        <dt>{k}</dt>
+        <dd>--</dd>
+        <span className={styles.bar} style={{ "--i": i } as React.CSSProperties} />
+      </div>
+    ))}
+  </dl>
+);
+
+const Keys = () => (
+  <div className={styles.vKeys} aria-hidden="true">
+    {["Ctrl", "Alt", "Shift", "Q"].map((k, i) => (
+      <kbd key={k} className={styles.key} style={{ "--i": i } as React.CSSProperties}>
+        {k}
+      </kbd>
+    ))}
+  </div>
+);
+
+const Portable = () => (
+  <div className={styles.vPortable} aria-hidden="true">
+    {["kvm_host.exe", "kvm_client.exe", "config.json"].map((f) => (
+      <code key={f} className={styles.chip}>
+        {f}
+      </code>
+    ))}
+  </div>
+);
+
+const VISUALS = [Merge, Carry, Files, Cursor, Hud, Keys, Portable];
 
 export function Features() {
   const { t } = useLang();
@@ -35,24 +87,28 @@ export function Features() {
     <section id="features" className="section" aria-labelledby="features-title">
       <div className="container">
         <div className="section-head">
-          <p className="label" data-reveal>
-            {t.features.label}
-          </p>
           <h2 id="features-title" className="h2" data-reveal="mask">
             {t.features.title}
           </h2>
+          <p className="lead" data-reveal>
+            {t.features.intro}
+          </p>
         </div>
         <ul className={styles.grid}>
-          {t.features.items.map((f, i) => (
-            <li key={i} className={styles.card} data-reveal onPointerMove={tilt} onPointerLeave={untilt}>
-              <div className={styles.top}>
-                <span className="label">M-{String(i + 1).padStart(2, "0")}</span>
-                <span className={styles.status} role="img" aria-label={t.features.statusOk} />
-              </div>
-              <h3 className="h3">{f.title}</h3>
-              <p className="body">{f.text}</p>
-            </li>
-          ))}
+          {t.features.items.map((f, i) => {
+            const Visual = VISUALS[i];
+            return (
+              <li key={i} className={`${styles.tile} ${styles[`t${i}`]}`} data-reveal onPointerMove={track}>
+                <div className={styles.core}>
+                  {Visual && <Visual />}
+                  <div className={styles.text}>
+                    <h3 className="h3">{f.title}</h3>
+                    <p className="body">{f.text}</p>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </section>

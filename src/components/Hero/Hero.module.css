@@ -1,156 +1,111 @@
 .hero {
   position: relative;
+  padding-top: clamp(40px, 7vh, 80px);
+  text-align: center;
   overflow: hidden;
-  min-height: calc(100vh - var(--nav-h));
-  min-height: calc(100svh - var(--nav-h));
-  display: flex;
-  align-items: center;
-  padding: var(--s-64) 0;
-}
-
-.inner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  row-gap: var(--s-48);
-  align-items: center;
-}
-
-.top {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s-24);
 }
 
 .copy {
-  grid-column: 1 / span 5;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s-24);
+  align-items: center;
+  gap: var(--s-16);
 }
 
-.wordmark {
-  display: inline-flex;
-  align-items: flex-start;
+.eyebrow {
+  font-size: clamp(19px, 1.7vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
 }
 
-/* Letters rise out of a mask on load */
-.charMask {
+.version {
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.title {
+  max-width: 14ch;
+  font-size: clamp(44px, 5.8vw, 88px);
+}
+
+/* Each phrase rises out of its own mask */
+.line {
   display: inline-block;
   overflow: hidden;
-  padding-top: 0.06em;
-  margin-top: -0.06em;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+  vertical-align: top;
 }
 
-.char {
+.lineInner {
   display: inline-block;
-  animation: rise 1100ms var(--ease-out) both;
+  animation: line-rise 1200ms var(--ease-emph) both;
   animation-delay: var(--d, 0ms);
 }
 
-/* Accent block caret: 12% of font size wide, full cap height, 530ms blink */
-.caret {
-  display: inline-block;
-  width: 0.12em;
-  height: 0.72em;
-  margin-left: 0.08em;
-  margin-top: 0.09em;
-  background: var(--accent);
-  animation: blink 1060ms steps(1, end) infinite;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 1;
+@keyframes line-rise {
+  from {
+    transform: translateY(105%);
   }
-  50% {
-    opacity: 0;
+  to {
+    transform: none;
   }
-}
-
-.tagline {
-  max-width: 18ch;
-}
-
-html[lang="ka"] .tagline {
-  max-width: 24ch;
 }
 
 .sub {
-  max-width: 60ch;
+  max-width: 46ch;
+  margin-top: var(--s-4);
 }
 
 .ctas {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-12);
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-16) var(--s-32);
+  margin-top: var(--s-16);
+}
+
+/* The product render: wide, tall, the devices centred */
+.stage {
+  position: relative;
+  height: clamp(400px, 64vh, 680px);
   margin-top: var(--s-8);
 }
 
-.scene {
-  grid-column: 6 / -1;
-  width: 100%;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
-  padding: var(--s-24);
+.canvas {
+  position: absolute;
+  inset: 0;
 }
 
-@media (max-width: 959px) {
-  .copy,
-  .scene {
-    grid-column: 1 / -1;
-  }
+.stageLoading {
+  position: absolute;
+  inset: 0;
 }
 
-@media (max-width: 639px) {
-  .hero {
-    padding: var(--s-48) 0;
-  }
-  .scene {
-    padding: var(--s-16);
+.meta {
+  padding-bottom: var(--s-48);
+}
+
+@media (max-width: 767px) {
+  .stage {
+    height: 46vh;
+    min-height: 300px;
+    margin-top: var(--s-16);
   }
   .ctas {
     flex-direction: column;
-    align-self: stretch;
-  }
-  .ctas :global(.btn) {
-    width: 100%;
   }
 }
 
-/* Keyframes are module-scoped, so they're declared here rather than in globals.css */
-@keyframes rise {
-  from {
-    transform: translateY(105%);
-  }
-  to {
-    transform: translateY(0);
-  }
+/* Georgian has deep descenders: give the rise mask more room */
+:global(html[lang="ka"]) .line {
+  padding-bottom: 0.24em;
+  margin-bottom: -0.24em;
 }
 
-/* Reduced motion (OS setting or the site's motion toggle) */
-:global(:root[data-motion="reduced"]) .char {
-  animation: fade-in-local 700ms var(--ease-out) both;
-  animation-delay: var(--d, 0ms);
-}
-:global(:root[data-motion="reduced"]) .caret {
-  animation: none;
-}
-
-@keyframes fade-in-local {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Georgian words run longer: let the headline use two lines instead of three */
+:global(html[lang="ka"]) .title {
+  max-width: 22ch;
 }

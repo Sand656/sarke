@@ -10,3 +10,5 @@ npm-debug.log*
 .DS_Store
 .npmrc
 AGENTS.md
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

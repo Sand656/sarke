@@ -9,22 +9,24 @@ export function Limits() {
   return (
     <section id="limits" className="section" aria-labelledby="limits-title">
       <div className="container">
-        <div className="section-head">
-          <p className="label" data-reveal>
-            {t.limits.label}
-          </p>
-          <h2 id="limits-title" className="h2" data-reveal="mask">
-            {t.limits.title}
-          </h2>
+        <div className={styles.field}>
+          <div className={styles.head}>
+            <h2 id="limits-title" className="h2" data-reveal="mask">
+              {t.limits.title}
+            </h2>
+            <p className="lead" data-reveal>
+              {t.limits.intro}
+            </p>
+          </div>
+          <ul className={styles.list}>
+            {t.limits.items.map((item, i) => (
+              <li key={i} className={styles.item} data-reveal>
+                <span className={styles.mark} aria-hidden="true" />
+                <p className="body">{rich(item)}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-        <ul className={styles.list}>
-          {t.limits.items.map((item, i) => (
-            <li key={i} className={styles.item} data-reveal>
-              <span className={styles.mark} aria-hidden="true" />
-              <p className="body">{rich(item)}</p>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

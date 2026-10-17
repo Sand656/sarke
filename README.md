@@ -1,8 +1,8 @@
 # sarke-web
 
-Website for **Sarke** (სარკე, "mirror"): a free Windows app that connects two PCs on the same LAN for edge crossing and window mirroring.
+Website for **Sarke** (სარკე, "mirror"): a free Windows app that merges two or more PCs on the same LAN into one workspace — one cursor, and windows and files dragged between machines.
 
-Next.js (App Router) · TypeScript · CSS Modules + CSS custom properties · GSAP + ScrollTrigger · self-hosted JetBrains Mono / Noto Sans Georgian.
+Next.js (App Router) · TypeScript · CSS Modules + CSS custom properties · React Three Fiber (3D product stage) · GSAP + Lenis · Google Sans (Latin + Georgian, OFL) and Geist Mono.
 
 ## Run
 
@@ -30,13 +30,21 @@ Until the repo is set, the download section shows `release info unavailable` and
 - `config.json` key reference and CMake build commands for `/docs` (from the Sarke C++ repo's `config.json` and `CLAUDE.md`)
 - Team credits and license (footer, `src/i18n/en.ts` + `ka.ts`)
 
+## 3D performance
+
+The device stage (src/components/three) is built to hold 60 fps on integrated GPUs:
+
+- one render pass: no reflections or post-processing; contact shadows are baked sprites;
+- screen art is painted once at 2× resolution; the moving window, file, cursor and toast are composited by a shader (screenShader.ts), so no texture is re-uploaded per frame;
+- render resolution adapts (2× → 1×) via drei PerformanceMonitor; nothing renders while the stage is off screen.
+
 ## Structure
 
 - `src/app`: routes (`/`, `/docs`), metadata, OG image, favicons, sitemap, robots
 - `src/components`: one folder per section, each with its own CSS module
-- `src/components/DeskScene`: the hero/how-it-works SVG illustration and its GSAP timeline
+- `src/components/three`: the 3D stage — devices, choreography (choreo.ts), screen art (screens.ts) and the GPU compositor (screenShader.ts)
 - `src/i18n`: all copy (`en.ts` source of truth, `ka.ts` Georgian). The EN/KA choice is stored in `localStorage`
-- `src/app/globals.css`: design tokens. Values match the app exactly; don't change them
+- `src/app/globals.css`: design tokens (Apple-like neutral palette, one blue accent), type scale, Georgian typography rules
 
 ## Deploy (Vercel)
 

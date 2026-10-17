@@ -14,6 +14,7 @@ const SECTION_IDS: Record<SectionKey, string> = {
   requirements: "requirements",
   install: "install",
   firstRun: "first-run",
+  using: "using",
   config: "config",
   hotkeys: "hotkeys",
   firewall: "firewall",
@@ -124,6 +125,8 @@ export function DocsContent() {
             </ol>
           </>,
         )}
+
+        {section("using", list(d.using))}
 
         {section(
           "config",

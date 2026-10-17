@@ -15,6 +15,7 @@ export function Specs() {
 
   const rows: [string, React.ReactNode, string?][] = [
     [r.platform[0], r.platform[1]],
+    [r.computers[0], r.computers[1]],
     [r.network[0], r.network[1]],
     [r.capture[0], r.capture[1]],
     [r.codec[0], r.codec[1]],
@@ -26,23 +27,25 @@ export function Specs() {
 
   return (
     <section id="specs" className="section" aria-labelledby="specs-title">
-      <div className="container">
-        <div className="section-head">
-          <p className="label" data-reveal>
-            {t.specs.label}
-          </p>
+      <div className={`container ${styles.grid}`}>
+        <div className={styles.head}>
           <h2 id="specs-title" className="h2" data-reveal="mask">
             {t.specs.title}
           </h2>
+          <p className="lead" data-reveal>
+            {t.specs.intro}
+          </p>
         </div>
-        <dl className={styles.table}>
-          {rows.map(([k, v, cls]) => (
-            <div key={k} className={styles.row} data-reveal>
-              <dt className="label">{k}</dt>
-              <dd className={`readout ${cls ?? ""}`}>{v}</dd>
-            </div>
-          ))}
-        </dl>
+        <div className={`bezel ${styles.panel}`} data-reveal>
+          <dl className={`bezel-core ${styles.table}`}>
+            {rows.map(([k, v, cls]) => (
+              <div key={k} className={styles.row}>
+                <dt className={styles.key}>{k}</dt>
+                <dd className={`readout ${cls ?? ""}`}>{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </div>
     </section>
   );

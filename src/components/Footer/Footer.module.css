@@ -1,13 +1,15 @@
 .footer {
+  position: relative;
+  padding-top: var(--s-64);
   border-top: 1px solid var(--line);
-  padding: var(--s-64) 0 var(--s-96);
-  background: var(--bg0);
+  background: var(--bg-alt);
+  overflow: hidden;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--gutter);
+  gap: var(--s-48) var(--gutter);
 }
 
 .brandCol {
@@ -15,24 +17,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--s-16);
-  max-width: 48ch;
-}
-
-.wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-12);
-  font-size: 40px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  color: var(--text-hi);
-}
-
-.square {
-  width: 12px;
-  height: 12px;
-  background: var(--accent);
 }
 
 .col {
@@ -51,19 +35,42 @@
 
 .links a {
   display: inline-block;
-  color: var(--text-mid);
   font-size: 14px;
-  transition: color var(--t-ui) linear;
+  color: var(--ink-2);
 }
-
 .links a:hover {
-  color: var(--text-hi);
+  color: var(--ink);
 }
 
 .todo {
   font-size: 14px;
   color: var(--warn);
   margin-bottom: var(--s-16);
+}
+
+/* Giant wordmark with its mirror image underneath (sarke = mirror) */
+.wordmark {
+  margin-top: var(--s-96);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-wordmark), var(--font);
+  font-size: clamp(110px, 25vw, 420px);
+  font-weight: 600;
+  letter-spacing: -0.07em;
+  line-height: 0.78;
+  color: var(--ink);
+  user-select: none;
+}
+
+/* Mask is applied before the flip, so its opaque end sits against the original word */
+.reflection {
+  transform: scaleY(-1);
+  opacity: 0.22;
+  margin-top: 0.04em;
+  margin-bottom: -0.42em;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 45%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 45%, #000 100%);
 }
 
 @media (max-width: 959px) {
@@ -79,4 +86,9 @@
   .col {
     grid-column: 1 / -1;
   }
+}
+
+/* The wordmark is Latin: keep its own tracking on the Georgian page */
+:global(html[lang="ka"]) .wordmark {
+  letter-spacing: -0.07em !important;
 }

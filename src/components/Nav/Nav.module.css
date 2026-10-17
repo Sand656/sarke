@@ -1,16 +1,39 @@
+/* Apple-style product nav: slim, full width, translucent */
 .nav {
   position: sticky;
   top: 0;
   z-index: 50;
-  height: var(--nav-h);
-  background: var(--nav-bg);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  border-bottom: 1px solid var(--line);
+  transition: transform 520ms var(--ease-emph);
 }
 
-.inner {
-  height: 100%;
+/* Slides away while scrolling down; returns on scroll up (never while the menu is open) */
+.nav[data-hidden="true"]:not([data-open]) {
+  transform: translateY(-100%);
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--line);
+  transition: opacity 400ms var(--ease-out);
+}
+
+/* Transparent at the very top, frosted once the page moves */
+.nav[data-scrolled="false"]:not([data-open])::before {
+  opacity: 0;
+}
+
+.bar {
+  height: var(--nav-h);
   display: flex;
   align-items: center;
   gap: var(--s-32);
@@ -19,23 +42,45 @@
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--s-8);
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--text-hi);
+  gap: 9px;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
   flex: none;
 }
 
-.square {
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  background: var(--accent);
-  transition: transform 500ms var(--ease-out);
+/* Two overlapping squares: one desktop mirrored into the next */
+.mark {
+  position: relative;
+  width: 16px;
+  height: 16px;
 }
-.brand:hover .square {
-  transform: rotate(90deg) scale(1.25);
+.mark::before,
+.mark::after {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  transition: transform var(--dur-slow) var(--ease-emph);
+}
+.mark::before {
+  left: 0;
+  top: 0;
+  background: var(--ink);
+}
+.mark::after {
+  right: 0;
+  bottom: 0;
+  border: 1.5px solid var(--ink);
+  background: var(--bg);
+}
+.brand:hover .mark::before {
+  transform: translate(2px, 2px);
+}
+.brand:hover .mark::after {
+  transform: translate(-2px, -2px);
 }
 
 .links {
@@ -45,99 +90,121 @@
 }
 
 .link {
-  transition: color var(--t-smooth) var(--ease-out);
+  font-size: 12px;
+  color: var(--ink-2);
   white-space: nowrap;
-  padding: var(--s-8) 0;
+  transition: color var(--dur-normal) var(--ease-out);
 }
 .link:hover,
 .link[aria-current] {
-  color: var(--text-hi);
+  color: var(--ink);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--s-16);
+  gap: var(--s-12);
+}
+
+/* Small blue pill, like a product nav's "Buy" */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 980px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--on-accent);
+  background: var(--accent);
+  transition: background-color var(--dur-normal) var(--ease-out);
+}
+.cta:hover {
+  background: var(--accent-hover);
 }
 
 .lang {
   display: inline-flex;
   align-items: center;
+  gap: 2px;
 }
 
 .langItem {
   display: inline-flex;
-  align-items: center;
 }
 
 .langSep {
-  color: var(--text-lo);
-  font-size: 12px;
-  padding: 0 var(--s-4);
+  display: none;
 }
 
 .langBtn {
-  border-radius: var(--r-xs);
-  min-width: 32px;
-  height: 32px;
+  height: 28px;
+  min-width: 30px;
+  padding: 0 6px;
+  border-radius: 980px;
   font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--text-lo);
-  transition: color var(--t-ui) linear;
+  font-weight: 500;
+  color: var(--ink-3);
+  transition:
+    color var(--dur-normal) var(--ease-out),
+    background-color var(--dur-normal) var(--ease-out);
 }
 .langBtn:hover {
-  color: var(--text-hi);
+  color: var(--ink);
 }
 .langBtn[aria-pressed="true"] {
-  color: var(--accent-ink);
-  font-weight: 700;
+  color: var(--ink);
+  background: var(--bg-high);
 }
 
 .menuBtn {
   display: none;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-sm);
+  border-radius: 50%;
 }
 
 .bars {
   position: relative;
-  width: 18px;
-  height: 10px;
+  width: 17px;
+  height: 9px;
   display: block;
 }
 .bars span {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 2px;
-  background: var(--text-hi);
-  transition: transform var(--t-ui) linear, top var(--t-ui) linear;
+  height: 1.4px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition:
+    transform var(--dur-slow) var(--ease-emph),
+    top var(--dur-slow) var(--ease-emph);
 }
 .bars span:first-child {
   top: 0;
 }
 .bars span:last-child {
-  top: 8px;
+  top: 7px;
 }
 .bars[data-open="true"] span:first-child {
-  top: 4px;
+  top: 3.5px;
   transform: rotate(45deg);
 }
 .bars[data-open="true"] span:last-child {
-  top: 4px;
+  top: 3.5px;
   transform: rotate(-45deg);
 }
 
+/* Full-screen menu */
 .menu {
   position: fixed;
   inset: var(--nav-h) 0 0 0;
-  background: var(--bg0);
+  padding: var(--s-32) 0 var(--s-48);
+  background: var(--bg);
   overflow-y: auto;
-  padding: var(--s-48) 0;
 }
 .menu[hidden] {
   display: none;
@@ -146,35 +213,34 @@
 .menuList {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--line);
-}
-.menuList li {
-  border-bottom: 1px solid var(--line);
+  gap: var(--s-4);
 }
 
 .menuLink {
   display: block;
-  padding: var(--s-16) 0;
+  padding: var(--s-8) 0;
+  font-size: 28px;
   transition:
     color var(--dur-normal) var(--ease-out),
-    transform var(--dur-normal) var(--ease-out);
+    transform var(--dur-slow) var(--ease-emph);
 }
 .menuLink:hover,
 .menuLink[aria-current] {
   color: var(--accent-ink);
-  transform: translateX(var(--s-12));
 }
 
-/* Menu opens with a wipe (ease-out) and links stagger in 40ms apart;
-   it closes faster with ease-in, as exits should */
+.menuFoot {
+  margin-top: var(--s-48);
+}
+
 .menu[data-state="open"] {
-  animation: menu-in var(--dur-slow) var(--ease-out) both;
+  animation: menu-in var(--dur-normal) var(--ease-out) both;
 }
 .menu[data-state="closing"] {
-  animation: menu-out 240ms var(--ease-in) both;
+  animation: menu-out 200ms var(--ease-in) both;
 }
 .menu[data-state="open"] .menuList li {
-  animation: fade-up var(--dur-slow) var(--ease-out) both;
+  animation: link-in 600ms var(--ease-emph) both;
 }
 .menu[data-state="open"] .menuList li:nth-child(2) {
   animation-delay: 40ms;
@@ -188,36 +254,32 @@
 .menu[data-state="open"] .menuList li:nth-child(5) {
   animation-delay: 160ms;
 }
-@keyframes menu-out {
-  from {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-  to {
-    opacity: 0;
-    clip-path: inset(0 0 100% 0);
-  }
-}
+
 @keyframes menu-in {
   from {
-    clip-path: inset(0 0 100% 0);
+    opacity: 0;
   }
   to {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+@keyframes menu-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes link-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-.menuFoot {
-  margin-top: var(--s-32);
-}
-
-@media (max-width: 1199px) {
-  .links {
-    gap: var(--s-16);
-  }
-}
-
-@media (max-width: 959px) {
+@media (max-width: 899px) {
   .links {
     display: none;
   }
@@ -232,62 +294,14 @@
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 900px) {
   .menu {
     display: none !important;
   }
 }
 
-
-@media (max-width: 479px) {
+@media (max-width: 380px) {
   .cta {
     display: none;
   }
-  .actions {
-    gap: var(--s-8);
-  }
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes menu-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes menu-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-/* Reduced motion (OS setting or the site's motion toggle) */
-:global(:root[data-motion="reduced"]) .menu[data-state="open"] {
-  animation: menu-fade-in var(--dur-normal) linear both;
-}
-:global(:root[data-motion="reduced"]) .menu[data-state="closing"] {
-  animation: menu-fade-out var(--dur-fast) linear both;
-}
-:global(:root[data-motion="reduced"]) .menu[data-state="open"] .menuList li {
-  animation: none;
-}
-:global(:root[data-motion="reduced"]) .menuLink:hover,
-:global(:root[data-motion="reduced"]) .menuLink[aria-current] {
-  transform: none;
-}
-:global(:root[data-motion="reduced"]) .square,
-:global(:root[data-motion="reduced"]) .bars span {
-  transition: none;
 }

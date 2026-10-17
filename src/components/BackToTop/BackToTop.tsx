@@ -56,7 +56,7 @@ export function BackToTop() {
           y="1"
           width="46"
           height="46"
-          rx="9"
+          rx="23"
           pathLength={PERIMETER}
           strokeDasharray={PERIMETER}
           strokeDashoffset={PERIMETER}

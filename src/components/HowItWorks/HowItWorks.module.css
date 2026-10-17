@@ -4,133 +4,121 @@
   gap: var(--gutter);
 }
 
-.diagramCol {
+/* Sticky (not pinned): no transforms on ancestors to worry about */
+.stageCol {
   grid-column: 1 / span 8;
+  position: relative;
 }
 
-.pin {
-  height: calc(100vh - var(--nav-h));
-  display: flex;
-  align-items: center;
+.stageShell {
+  position: sticky;
+  top: 96px;
 }
 
-/* 3D stage: GSAP sweeps the frame's tilt with the scroll and floats the stage */
-.stage {
-  width: 100%;
-  will-change: transform;
+.stageCore {
+  position: relative;
+  height: min(72vh, 640px);
+  overflow: hidden;
 }
 
-.stage .frame {
-  transform-style: preserve-3d;
-  will-change: transform;
+.canvas {
+  position: absolute;
+  inset: 0;
 }
 
-.frame {
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-lg);
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-lg);
-  padding: var(--s-24);
+.loading {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 50% at 50% 60%, rgba(25, 198, 255, 0.08), transparent 70%);
 }
 
-.frameBar {
+.hud {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--s-16);
-  padding-bottom: var(--s-16);
-  margin-bottom: var(--s-16);
-  border-bottom: 1px solid var(--line);
+  padding: 12px 18px;
+  border-radius: 980px;
+  background: var(--surface-strong);
 }
 
-.frameTitle {
-  color: var(--text-hi);
+.hudTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
 }
 
-.progress {
+.rail {
   display: flex;
-  gap: var(--s-4);
+  gap: 6px;
 }
-
-.progress span {
-  width: 32px;
-  height: 3px;
-  border-radius: 2px;
+.rail span {
+  width: 36px;
+  height: 4px;
+  border-radius: 4px;
   background: var(--line-strong);
-  transition: background-color 600ms var(--ease-out);
+  transition: background-color var(--dur-slow) var(--ease-out);
 }
-
-.progress span[data-on="true"] {
+.rail span[data-on="true"] {
   background: var(--accent);
 }
 
-.steps {
+.chapters {
   grid-column: 9 / span 4;
   display: flex;
   flex-direction: column;
 }
 
-/* One viewport (minus nav) per step: the pin releases exactly as the last step is centered */
-.step {
-  min-height: calc(100vh - var(--nav-h));
+.chapter {
+  min-height: 72vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--s-12);
-  border-top: 1px solid var(--line);
-  padding: var(--s-48) 0;
-  transition: opacity 700ms var(--ease-out);
+  gap: var(--s-16);
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.chapter[data-current="false"] {
+  opacity: 0.3;
 }
 
-/* Dim the steps that aren't driving the diagram */
-.step[data-current="false"] {
-  opacity: 0.35;
+.chapterTitle {
+  font-size: clamp(26px, 2.4vw, 34px);
+  letter-spacing: -0.03em;
 }
 
-.step:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
-.num {
-  color: var(--accent-ink);
-}
-
-.slash {
-  color: var(--text-lo);
-}
-
-@media (max-width: 1199px) {
-  .diagramCol {
+@media (max-width: 1079px) {
+  .stageCol {
     grid-column: 1 / span 7;
   }
-  .steps {
+  .chapters {
     grid-column: 8 / span 5;
   }
 }
 
-@media (max-width: 959px) {
-  .steps {
+/* Phones and tablets: the stage sticks to the top while the chapters scroll under it */
+@media (max-width: 899px) {
+  .stageCol,
+  .chapters {
     grid-column: 1 / -1;
-    gap: var(--s-48);
   }
-  .step {
-    min-height: 0;
-    border-top: 0;
-    padding: 0;
+  .stageCol {
+    position: sticky;
+    top: 84px;
+    z-index: 2;
+    align-self: start;
   }
-  .step:last-child {
-    border-bottom: 0;
+  .stageShell {
+    position: static;
   }
-  .step .frame {
-    margin-bottom: var(--s-16);
+  .stageCore {
+    height: 42vh;
+    min-height: 260px;
   }
-}
-
-@media (max-width: 639px) {
-  .frame {
-    padding: var(--s-16);
+  .chapter {
+    min-height: 60vh;
   }
 }
-

@@ -1,29 +1,54 @@
-.list {
+/* A raised field (one tone step up) instead of lines */
+.field {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  border-top: 1px solid var(--line);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--s-48) var(--gutter);
+  padding: var(--s-64);
+  border-radius: var(--r-xl);
+  background: var(--bg-raise);
+}
+
+.head {
+  grid-column: 1 / span 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-24);
+}
+
+.list {
+  grid-column: 7 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-24);
 }
 
 .item {
   display: flex;
   gap: var(--s-16);
   align-items: baseline;
-  padding: var(--s-16) 0;
-  border-bottom: 1px solid var(--line);
 }
 
 .mark {
   flex: none;
   width: 8px;
   height: 8px;
-  border-radius: 2px;
+  border-radius: 50%;
   background: var(--warn);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 959px) {
+  .field {
+    padding: var(--s-32);
+  }
+  .head,
   .list {
-    grid-template-columns: minmax(0, 1fr);
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 639px) {
+  .field {
+    padding: var(--s-24);
   }
 }

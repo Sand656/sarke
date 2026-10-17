@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useLang } from "@/i18n/LangProvider";
 import { loadGsap } from "@/lib/gsap";
-import { useReducedMotion } from "@/lib/motion";
 
 /**
  * Scroll reveals for every [data-reveal] element on the page.
@@ -15,10 +14,8 @@ import { useReducedMotion } from "@/lib/motion";
 export function RevealManager() {
   const pathname = usePathname();
   const { lang } = useLang();
-  const reduced = useReducedMotion();
 
   useEffect(() => {
-    // Reduced motion: opacity-only fades (no rise, no clip wipe, no scale)
     let cancelled = false;
     let revert: (() => void) | undefined;
 
@@ -33,9 +30,7 @@ export function RevealManager() {
         for (const el of pending) {
           gsap.set(
             el,
-            reduced
-              ? { autoAlpha: 0 }
-              : el.dataset.reveal === "mask"
+            el.dataset.reveal === "mask"
               ? { clipPath: "inset(0% 0% 100% 0%)", y: 32 }
               : { autoAlpha: 0, y: 56, scale: 0.985, transformOrigin: "50% 100%" },
           );
@@ -50,8 +45,8 @@ export function RevealManager() {
               y: 0,
               scale: 1,
               clipPath: "inset(0% 0% 0% 0%)",
-              duration: reduced ? 0.6 : 1.1,
-              ease: reduced ? "power1.out" : "expo.out",
+              duration: 1.2,
+              ease: "expo.out",
               stagger: 0.06,
               overwrite: true,
               clearProps: "all",
@@ -66,7 +61,7 @@ export function RevealManager() {
       cancelled = true;
       revert?.();
     };
-  }, [pathname, reduced]);
+  }, [pathname]);
 
   // Text length changes with the language — recompute trigger positions.
   useEffect(() => {

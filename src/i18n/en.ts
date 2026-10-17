@@ -1,16 +1,16 @@
-// English strings — source of truth for all copy. `code` in backticks renders as inline code.
+// English strings — source of truth for all copy. `code` in backticks renders as inline code, **x** bold.
 const en = {
   meta: {
-    title: "Sarke — one mouse, one more screen",
+    title: "Sarke — every desktop, one cursor",
     description:
-      "Sarke is a free Windows app: move your cursor from your PC to your laptop and mirror any window onto it. Clicks and typing go straight back. LAN only, no installer.",
+      "Sarke merges two or more Windows PCs into one workspace. Drag windows and files from one computer to another with the same mouse, as if they were one desktop. Free, local network, no installer.",
     docsTitle: "Docs — Sarke",
   },
   common: {
     copy: "Copy",
     copied: "Copied",
     copyFailed: "Copy failed",
-    planned: "PLANNED",
+    planned: "Planned",
     todo: "TODO",
   },
   nav: {
@@ -28,72 +28,90 @@ const en = {
     themeLight: "Switch to light mode",
     themeDark: "Switch to dark mode",
     backToTop: "Back to top",
-    motion: "Animations",
-    motionTurnOff: "Turn animations off",
-    motionTurnOn: "Turn animations on",
   },
   hero: {
-    label: "Windows 10/11",
-    tagline: "One mouse. One more screen.",
-    sub: "Move your cursor from your PC to your laptop, and mirror any window onto it — clicks and typing go straight back. No cables, no installer.",
+    titleA: "Every desktop.",
+    titleB: "One cursor.",
+    sub: "Sarke merges two or more Windows PCs into one workspace. Grab a window or a file on one computer and drop it on another, with the same mouse and the same drag.",
     ctaDownload: "Download for Windows",
-    ctaHow: "How it works",
-    small: "free · open source · LAN only",
-    illustration: "Illustration",
-    sceneTitle: "Illustration of Sarke",
-    sceneDesc:
-      "A host PC with two monitors and a laptop beside it. The cursor leaves the host's right screen and continues on the laptop. A window called editor.exe on the host is mirrored onto the laptop, and a click in the mirror travels back to the host.",
-    host: "A · HOST",
-    client: "B · CLIENT",
+    ctaHow: "See it work",
+    meta: "Free and open source · Windows 10 and 11 · Your local network",
+    latest: "Latest",
+    stageLabel:
+      "Animation: three computers on one desk act as one desktop. One cursor carries a window from the first PC to the second, then drags a file onto the laptop.",
   },
-  ticker: [
-    "Edge crossing",
-    "Window mirror",
-    "Input return",
-    "Live HUD",
-    "No installer",
-    "Ctrl+Alt+Shift+Q always works",
-  ],
+  manifesto: {
+    statement:
+      "This isn't screen sharing. Sarke turns the computers on your desk into one workspace, so moving between them feels like moving across a single screen.",
+    points: [
+      { value: "2+", label: "Windows PCs merged into one desktop" },
+      { value: "1", label: "mouse and keyboard for all of them" },
+      { value: "0", label: "installers, drivers or cloud accounts" },
+    ],
+  },
   how: {
-    label: "01 / How it works",
-    title: "Three moves",
-    stepLabel: "Step",
-    steps: [
+    title: "How it works",
+    intro: "Four moves, the same way you already use a single computer.",
+    stageLabel: "Animation of the step you are reading, played by your scroll.",
+    chapters: [
       {
-        num: "01",
-        title: "Cross",
-        text: "Push the cursor off the edge of your PC's screen. Sarke hands your mouse and keyboard to the laptop.",
+        title: "Connect",
+        text: "Run `kvm_host.exe` on your main PC and `kvm_client.exe` on the others. They link up over your local network.",
       },
       {
-        num: "02",
-        title: "Mirror",
-        text: "Pick any window on your PC with Ctrl+Alt+Shift+S. It appears on the laptop, live.",
+        title: "One cursor",
+        text: "Move past the edge of one screen and the pointer lands on the next computer. Your keyboard goes with it.",
       },
       {
-        num: "03",
-        title: "Touch",
-        text: "Click, scroll and type in the mirror. Every input goes back to the real window — the app never leaves your PC.",
+        title: "Carry a window",
+        text: "Grab any window by its title bar and drag it onto another PC's screen. Let go, and it's there.",
+      },
+      {
+        title: "Drop a file",
+        text: "Drag a file from one desktop into a folder on another. No cloud, no USB stick, no upload.",
       },
     ],
   },
   features: {
-    label: "02 / Features",
-    title: "Modules",
-    statusOk: "Available",
+    title: "One workspace, many machines",
+    intro: "Everything you do across one screen now works across every computer on the desk.",
     items: [
-      { title: "Edge crossing", text: "One mouse and keyboard for both machines." },
-      { title: "Window mirror", text: "Stream a single window, not the whole desktop." },
-      { title: "Input return", text: "The mirror is fully interactive." },
-      { title: "Emergency exit", text: "Ctrl+Alt+Shift+Q always gives control back." },
-      { title: "Live HUD", text: "See RTT, FPS, latency and bitrate in real time." },
-      { title: "Portable", text: "Two exe files and a config. Nothing to install." },
+      {
+        title: "Merge your desktops",
+        text: "Two, three or more Windows PCs behave like one wide desktop, arranged the way they sit on your desk.",
+      },
+      {
+        title: "Carry windows across",
+        text: "Grab a window on one computer and drag it onto another's screen.",
+      },
+      {
+        title: "Drop files on any machine",
+        text: "Pick up a file on one desktop and drop it into a folder on another.",
+      },
+      {
+        title: "One mouse, one keyboard",
+        text: "Push past a screen edge and keep going on the next PC. Typing follows the cursor.",
+      },
+      {
+        title: "Live HUD",
+        text: "RTT, FPS, latency, bitrate, resolution and dropped frames while you work.",
+      },
+      {
+        title: "Emergency exit",
+        text: "Ctrl+Alt+Shift+Q always hands control back to your main PC.",
+      },
+      {
+        title: "Portable",
+        text: "Two .exe files and a config.json. Nothing to install, nothing left behind.",
+      },
     ],
   },
   specs: {
-    label: "03 / Specs",
-    title: "Specifications",
+    title: "Small, native, local",
+    intro: "Written in C++20 for Windows. It runs on your network and nowhere else.",
     rows: {
       platform: ["Platform", "Windows 10 / 11 · x64"],
+      computers: ["Computers", "2 or more, on the same network"],
       network: ["Network", "Same LAN · TCP 50500–50501"],
       capture: ["Capture", "Windows.Graphics.Capture"],
       codec: ["Codec", "JPEG (H.264 planned)"],
@@ -105,21 +123,21 @@ const en = {
     unavailable: "—",
   },
   limits: {
-    label: "04 / Limitations",
-    title: "Know before you run it",
+    title: "Before you install",
+    intro: "Sarke is young. Here is what it doesn't do yet, and what Windows will say about it.",
     items: [
       "**No encryption or pairing yet.** Use only on trusted home or office networks.",
       "**LAN only.** Does not work over the internet.",
       "**Windows only.** No macOS or Linux.",
       "**Unsigned .exe.** Windows SmartScreen shows “Windows protected your PC”. Click More info → Run anyway.",
       "**Antivirus warnings.** Sarke uses keyboard/mouse hooks, input injection and screen capture, so some antivirus tools may flag it. Check the source code and the SHA-256 checksum.",
-      "**Minimized windows can't be mirrored.** Restore them first.",
+      "**Minimized windows can't be captured.** Restore them first.",
       "**Administrator windows** only receive input if the host is also run as Administrator.",
     ],
   },
   download: {
-    label: "05 / Download",
     title: "Get Sarke",
+    intro: "One zip for every PC on the desk.",
     version: "Version",
     released: "Released",
     size: "Size",
@@ -127,17 +145,17 @@ const en = {
     sha: "SHA-256",
     copySha: "Copy SHA-256",
     loading: "Loading release info",
-    unavailable: "release info unavailable",
+    unavailable: "Release info unavailable",
     button: "Download .zip",
     all: "All releases",
     notWindows: "Sarke runs on Windows 10/11. Download it on your PC.",
     quickTitle: "Quick start",
     steps: [
-      "Download and extract the zip on **both** PCs.",
-      "On PC A, allow `kvm_host.exe` in Windows Firewall (Private network).",
-      "Run `kvm_host.exe` on PC A.",
-      "Run `kvm_client.exe --host <A's IP>` on PC B.",
-      "Push the cursor off the screen edge. Press Ctrl+Alt+Shift+S on A to mirror a window.",
+      "Download and extract the zip on **every** PC you want to connect.",
+      "On the main PC, allow `kvm_host.exe` in Windows Firewall (Private network).",
+      "Run `kvm_host.exe` on the main PC.",
+      "Run `kvm_client.exe --host <A's IP>` on each of the other PCs.",
+      "Push the cursor off a screen edge. Drag windows and files across as if it were one desktop.",
     ],
     smartscreenTitle: "SmartScreen",
     smartscreen:
@@ -146,22 +164,27 @@ const en = {
     security: "This version has no encryption. Use Sarke only on networks you trust.",
   },
   roadmap: {
-    label: "06 / Roadmap",
     title: "What's next",
     note: "Not available yet. No dates.",
     items: [
       "H.264 hardware encoding",
       "GPU zero-copy pipeline",
-      "Virtual monitor driver — B appears as a real 3rd monitor",
-      "Drag windows from A onto B",
+      "Virtual monitor driver, so another PC appears as a real extra monitor",
       "Encrypted connection with PIN pairing",
       "Shared clipboard",
     ],
   },
   faq: {
-    label: "07 / FAQ",
     title: "Questions",
     items: [
+      {
+        q: "How many computers can I connect?",
+        a: "Two or more Windows PCs on the same local network. One runs `kvm_host.exe`, the others run `kvm_client.exe`.",
+      },
+      {
+        q: "Can I move files between computers?",
+        a: "Yes. Drag a file from one desktop and drop it on another. It travels over your local network.",
+      },
       {
         q: "Why does Windows warn me when I open it?",
         a: "Sarke isn't code-signed yet, so Windows SmartScreen shows “Windows protected your PC”. Click More info → Run anyway. To make sure the file is genuine, compare its SHA-256 checksum with the one in the download section.",
@@ -172,7 +195,7 @@ const en = {
       },
       {
         q: "Does it work over the internet?",
-        a: "No. Sarke works only between two PCs on the same local network.",
+        a: "No. Sarke works only between PCs on the same local network.",
       },
       {
         q: "Is it secure?",
@@ -183,8 +206,8 @@ const en = {
         a: "No. Sarke runs on Windows 10 and 11 (x64) only.",
       },
       {
-        q: "Why is the mirrored window black or frozen?",
-        a: "Minimized windows can't be captured. Restore the window on PC A first.",
+        q: "Why is a window black or frozen on the other PC?",
+        a: "Minimized windows can't be captured. Restore the window first.",
       },
       {
         q: "Why don't clicks work in some apps?",
@@ -192,17 +215,17 @@ const en = {
       },
       {
         q: "How do I get my mouse back if something goes wrong?",
-        a: "Press Ctrl+Alt+Shift+Q. It always returns control to PC A.",
+        a: "Press Ctrl+Alt+Shift+Q. It always returns control to your main PC.",
       },
     ],
   },
   footer: {
-    description: "A free Windows app that turns your laptop into one more screen for your PC.",
+    description: "Sarke merges the Windows PCs on your desk into one workspace.",
     links: "Links",
     github: "GitHub",
     releases: "Releases",
     docs: "Docs",
-    meaning: "SARKE = სარკე = MIRROR",
+    meaning: "Sarke (სარკე) means mirror in Georgian.",
     team: "Team",
     teamTodo: "TODO: team credits",
     license: "License",
@@ -216,6 +239,7 @@ const en = {
       requirements: "Requirements",
       install: "Install",
       firstRun: "First run",
+      using: "Moving windows and files",
       config: "config.json reference",
       hotkeys: "Hotkeys",
       firewall: "Firewall",
@@ -223,41 +247,45 @@ const en = {
       build: "Building from source",
     },
     requirements: [
-      "Two PCs running **Windows 10 or 11, x64**.",
-      "Both PCs on the **same local network**.",
-      "TCP port **50500** (control + input) and **50501** (video) reachable on PC A.",
+      "Two or more PCs running **Windows 10 or 11, x64**.",
+      "All PCs on the **same local network**.",
+      "TCP port **50500** (control + input) and **50501** (video) reachable on the main PC.",
       "`kvm_host.exe` allowed in Windows Firewall on **Private** networks.",
     ],
     install: [
-      "There is no installer. Download `sarke-windows-x64.zip` and extract it on **both** PCs.",
+      "There is no installer. Download `sarke-windows-x64.zip` and extract it on **every** PC.",
       "The folder contains `kvm_host.exe`, `kvm_client.exe` and `config.json`.",
       "The .exe is unsigned, so SmartScreen may show “Windows protected your PC”. Click More info → Run anyway. Verify the SHA-256 checksum from the release if you want to be sure.",
     ],
-    firstRunIntro: "PC A is the host (owns the physical mouse and keyboard). PC B is the client (the laptop next to it).",
+    firstRunIntro:
+      "The main PC runs the host (it owns the physical mouse and keyboard). Every other PC runs the client.",
     firstRun: [
-      "On PC A, find its local IP address: run `ipconfig` and read the IPv4 Address.",
-      "On PC A, run the host:",
-      "On PC B, run the client with A's IP:",
-      "Push the cursor off the edge of A's screen — it continues on B, and A's keyboard types on B.",
-      "On A, press Ctrl+Alt+Shift+S and pick a window. It is mirrored to B. Clicks, scrolling and typing in the mirror go back to the real window on A.",
+      "On the main PC, find its local IP address: run `ipconfig` and read the IPv4 Address.",
+      "On the main PC, run the host:",
+      "On each of the other PCs, run the client with the main PC's IP:",
+      "Push the cursor off a screen edge — it continues on the next PC, and the keyboard follows.",
+    ],
+    using: [
+      "**Windows:** grab a window by its title bar, drag it past the screen edge and let go on the other PC.",
+      "**Files:** drag a file from one desktop and drop it into a folder on another PC.",
+      "Clicks, scrolling and typing work on every machine, the same way they do on one computer.",
     ],
     configIntro: "Both executables read `config.json` from their folder.",
     configTodo:
       "TODO: the config.json keys come from the Sarke C++ repository (config.json and CLAUDE.md). They are not documented here yet to avoid guessing.",
     hotkeysHead: ["Keys", "Action"],
     hotkeys: [
-      ["Ctrl+Alt+Shift+Q", "Emergency exit — always returns control to PC A."],
-      ["Ctrl+Alt+Shift+S", "Window picker — choose a window on A to mirror to B."],
+      ["Ctrl+Alt+Shift+Q", "Emergency exit — always returns control to the main PC."],
+      ["Ctrl+Alt+Shift+S", "Window picker — choose a window to mirror."],
     ],
     firewall: [
-      "Sarke uses TCP **50500** (control + input) and **50501** (video). PC B connects to these ports on PC A.",
+      "Sarke uses TCP **50500** (control + input) and **50501** (video). The other PCs connect to these ports on the main PC.",
       "The first time `kvm_host.exe` runs, Windows may ask whether to allow it. Allow it on **Private networks**.",
       "Or add the rule yourself from an Administrator terminal (adjust the path):",
     ],
     troubleshootingIntro: "The common problems and their fixes:",
     buildIntro: "Sarke is written in C++20 and builds with CMake presets.",
-    buildTodo:
-      "TODO: copy the exact CMake preset commands from the Sarke C++ repository's CLAUDE.md.",
+    buildTodo: "TODO: copy the exact CMake preset commands from the Sarke C++ repository's CLAUDE.md.",
   },
 };
 
