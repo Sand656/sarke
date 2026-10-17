@@ -113,3 +113,36 @@
   --fs-label: 14px;
   --fs-small: 11px;
 }
+
+.desk {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.keys line {
+  stroke: var(--text-lo);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+/* Data flowing over the LAN */
+.lan {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+  opacity: 0.7;
+  animation: lan-flow 1.2s linear infinite;
+}
+
+.lanLabel {
+  fill: var(--text-lo);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+}
+
+@keyframes lan-flow {
+  to {
+    stroke-dashoffset: -16;
+  }
+}

@@ -1,5 +1,12 @@
 .table {
-  border-top: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 0 var(--s-24);
+}
+.row:last-child {
+  border-bottom: 0;
 }
 
 .row {
@@ -27,6 +34,7 @@
 
 .skeleton {
   display: inline-block;
+  border-radius: var(--r-xs);
   width: 96px;
   height: 14px;
   vertical-align: middle;

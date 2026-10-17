@@ -4,6 +4,7 @@
   min-width: 72px;
   padding: 0 var(--s-12);
   border: 1px solid var(--line-strong);
+  border-radius: var(--r-xs);
   color: var(--text-hi);
   font-size: 12px;
   text-transform: uppercase;

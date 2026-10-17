@@ -65,11 +65,16 @@ export function MirrorField() {
       pointer.y += (pointer.ty - pointer.y) * 0.05;
 
       ctx!.clearRect(0, 0, w, h);
+      // Idle drift: the camera sways slowly even when nothing else moves
+      const swayX = Math.sin(t * 0.21) * 0.7 + Math.sin(t * 0.07) * 0.4;
+      const swayY = Math.sin(t * 0.17) * 10;
+      // Scroll parallax: the horizon sinks as the hero scrolls away
+      const scrolled = Math.min(window.scrollY, h);
       const f = Math.min(w, h * 1.6) * 0.9; // focal length
-      const cx = w * 0.62 + pointer.x * 40;
-      const horizon = h * 0.52 + pointer.y * 24;
-      const camX = pointer.x * 1.2;
-      const travel = (t * 0.6) % SPACING;
+      const cx = w * 0.62 + pointer.x * 40 + swayX * 18;
+      const horizon = h * 0.52 + pointer.y * 24 + swayY + scrolled * 0.35;
+      const camX = pointer.x * 1.2 + swayX;
+      const travel = (t * 0.9 + scrolled * 0.004) % SPACING;
 
       const project = (x: number, y: number, z: number) => ({
         x: cx + ((x - camX) / z) * f,
@@ -124,8 +129,8 @@ export function MirrorField() {
 
       // Floating screens + reflections
       for (const s of SCREENS) {
-        const angle = Math.sin(t * s.spin + s.phase) * 0.6;
-        const bob = Math.sin(t * 0.7 + s.phase) * 0.12;
+        const angle = Math.sin(t * s.spin * 2 + s.phase) * 0.7 + scrolled * 0.0015;
+        const bob = Math.sin(t * 0.8 + s.phase) * 0.18;
         const cos = Math.cos(angle);
         const sin = Math.sin(angle);
         const corners = [

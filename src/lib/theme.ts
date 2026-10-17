@@ -27,24 +27,25 @@ export function applyTheme(theme: Theme) {
 }
 
 type ViewTransitionDoc = Document & {
-  startViewTransition?: (cb: () => void) => { ready: Promise<void> };
+  startViewTransition?: (cb: () => void) => { finished: Promise<void> };
 };
 
-/** Switches theme with a circular reveal growing from `origin` (View Transitions API, when available). */
-export function switchTheme(next: Theme, origin?: { x: number; y: number }) {
+/**
+ * Switches theme with a slow (~0.9s) crossfade of the whole page via the View Transitions API
+ * (styles in globals.css). Browsers without it transition every color instead.
+ */
+export function switchTheme(next: Theme) {
   const doc = document as ViewTransitionDoc;
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!doc.startViewTransition || reduced || !origin) {
+  const root = document.documentElement;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     applyTheme(next);
     return;
   }
-  const { x, y } = origin;
-  const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-  const transition = doc.startViewTransition(() => applyTheme(next));
-  transition.ready.then(() => {
-    document.documentElement.animate(
-      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-      { duration: 700, easing: "cubic-bezier(0.65, 0, 0.35, 1)", pseudoElement: "::view-transition-new(root)" },
-    );
-  });
+  if (doc.startViewTransition) {
+    doc.startViewTransition(() => applyTheme(next));
+    return;
+  }
+  root.classList.add("theme-fade");
+  applyTheme(next);
+  window.setTimeout(() => root.classList.remove("theme-fade"), 900);
 }

@@ -16,10 +16,7 @@ export function ThemeToggle() {
       data-theme-state={theme}
       aria-label={next === "light" ? t.nav.themeLight : t.nav.themeDark}
       title={next === "light" ? t.nav.themeLight : t.nav.themeDark}
-      onClick={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        switchTheme(next, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-      }}
+      onClick={() => switchTheme(next)}
     >
       {/* Sun and moon share one hairline drawing; CSS morphs between them */}
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" className={styles.icon}>

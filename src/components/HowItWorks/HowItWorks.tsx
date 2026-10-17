@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { DeskScene } from "@/components/DeskScene/DeskScene";
 import { GEOMETRY, STEP_LABELS, buildSceneTimeline } from "@/components/DeskScene/scene";
 import { useLang } from "@/i18n/LangProvider";
@@ -15,6 +15,7 @@ export function HowItWorks() {
   const reduced = usePrefersReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
   const layout = stacked ? "stack" : "row";
 
   useGsapEffect(
@@ -30,9 +31,10 @@ export function HowItWorks() {
         const tl = buildSceneTimeline(gsap, svg, GEOMETRY.row, { loop: false });
         tl.seek("start");
         const goTo = (i: number) => {
+          setActive(i);
           const label = STEP_LABELS[i + 1];
           if (reduced) tl.seek(label);
-          else tl.tweenTo(label, { duration: Math.min(1.6, Math.abs(tl.labels[label] - tl.time()) || 0.1) });
+          else tl.tweenTo(label, { duration: Math.min(1.8, Math.abs(tl.labels[label] - tl.time()) || 0.1), ease: "power2.inOut" });
         };
         ScrollTrigger.create({
           trigger: section.querySelector("[data-grid]"),
@@ -47,7 +49,12 @@ export function HowItWorks() {
             start: "top 60%",
             end: "bottom 60%",
             onToggle: (self) => self.isActive && goTo(i),
-            onLeaveBack: () => i === 0 && (reduced ? tl.seek("start") : tl.tweenTo("start")),
+            onLeaveBack: () => {
+              if (i !== 0) return;
+              setActive(0);
+              if (reduced) tl.seek("start");
+              else tl.tweenTo("start");
+            },
           }),
         );
         return;
@@ -70,6 +77,8 @@ export function HowItWorks() {
     sectionRef,
   );
 
+  const current = t.how.steps[active];
+
   return (
     <section id="how" ref={sectionRef} className="section" aria-labelledby="how-title">
       <div className="container">
@@ -86,16 +95,31 @@ export function HowItWorks() {
           {wide && (
             <div className={styles.diagramCol}>
               <div ref={pinRef} className={styles.pin}>
-                <div className={styles.frame}>
-                  <DeskScene layout="row" decorative />
+                <div className={styles.stage} data-active={active}>
+                  <div className={styles.frame}>
+                    <div className={styles.frameBar}>
+                      <p className="label">
+                        {t.how.stepLabel}{" "}
+                        <span className={`readout ${styles.num}`}>{current.num}</span>
+                        <span className={styles.slash}> / 0{t.how.steps.length} · </span>
+                        <span className={styles.frameTitle}>{current.title}</span>
+                      </p>
+                      <div className={styles.progress} aria-hidden="true">
+                        {t.how.steps.map((s, i) => (
+                          <span key={s.num} data-on={i <= active} />
+                        ))}
+                      </div>
+                    </div>
+                    <DeskScene layout="row" decorative />
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
           <ol className={styles.steps}>
-            {t.how.steps.map((s) => (
-              <li key={s.num} className={styles.step} data-step data-reveal>
+            {t.how.steps.map((s, i) => (
+              <li key={s.num} className={styles.step} data-step data-reveal data-current={wide ? i === active : undefined}>
                 {!wide && (
                   <div className={styles.frame}>
                     <DeskScene layout={layout} decorative />

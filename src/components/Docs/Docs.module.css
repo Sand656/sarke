@@ -33,6 +33,7 @@
 }
 
 .tocLink {
+  border-radius: 0 var(--r-xs) var(--r-xs) 0;
   display: flex;
   gap: var(--s-12);
   padding: var(--s-8) var(--s-16);

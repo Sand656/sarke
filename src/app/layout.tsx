@@ -6,6 +6,7 @@ import { Nav } from "@/components/Nav/Nav";
 import { BackToTop } from "@/components/BackToTop/BackToTop";
 import { Providers } from "@/components/Providers";
 import { RevealManager } from "@/components/RevealManager";
+import { ScrollScene } from "@/components/ScrollScene/ScrollScene";
 import { SmoothScroll } from "@/lib/smooth";
 import { THEME_BOOT_SCRIPT } from "@/lib/themeScript";
 import { SITE_URL } from "@/config";
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Providers>
+          <ScrollScene />
           <SmoothScroll />
           <RevealManager />
           <Nav />

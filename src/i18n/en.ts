@@ -54,6 +54,7 @@ const en = {
   how: {
     label: "01 / How it works",
     title: "Three moves",
+    stepLabel: "Step",
     steps: [
       {
         num: "01",

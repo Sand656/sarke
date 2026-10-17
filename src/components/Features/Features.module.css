@@ -11,8 +11,12 @@
   --mx: 50%;
   --my: 50%;
   position: relative;
-  background: var(--bg1);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
   padding: var(--s-24);
   display: flex;
   flex-direction: column;
@@ -29,6 +33,7 @@
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   pointer-events: none;
   opacity: 0;
   background: radial-gradient(260px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
@@ -54,6 +59,8 @@
 .status {
   width: 8px;
   height: 8px;
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--ok);
   background: var(--ok);
 }
 

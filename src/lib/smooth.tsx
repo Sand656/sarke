@@ -32,7 +32,7 @@ export function SmoothScroll() {
     let stopTicker: (() => void) | undefined;
 
     if (!reduced) {
-      lenis = new Lenis({ lerp: 0.1, smoothWheel: true, autoRaf: false });
+      lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9, smoothWheel: true, autoRaf: false });
       // Drive Lenis from GSAP's ticker so ScrollTrigger pins stay in sync.
       loadGsap().then(({ gsap, ScrollTrigger }) => {
         if (cancelled || !lenis) return;

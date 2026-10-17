@@ -96,7 +96,11 @@ html[lang="ka"] .tagline {
   grid-column: 6 / -1;
   width: 100%;
   border: 1px solid var(--line);
-  background: var(--nav-bg);
+  background: var(--surface);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
   padding: var(--s-24);
 }
 

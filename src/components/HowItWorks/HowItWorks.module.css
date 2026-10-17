@@ -5,7 +5,7 @@
 }
 
 .diagramCol {
-  grid-column: 1 / span 7;
+  grid-column: 1 / span 8;
 }
 
 .pin {
@@ -14,14 +14,72 @@
   align-items: center;
 }
 
-.pin > .frame {
+/* 3D stage: the frame tilts a little differently on each step */
+.stage {
   width: 100%;
+  perspective: 1800px;
+}
+
+.stage .frame {
+  transform: rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+  transform-style: preserve-3d;
+  transition:
+    transform 1400ms var(--ease-out),
+    box-shadow 1400ms var(--ease-out);
+}
+
+.stage[data-active="0"] .frame {
+  --tx: 6deg;
+  --ty: 9deg;
+}
+.stage[data-active="1"] .frame {
+  --tx: 4deg;
+  --ty: 0deg;
+}
+.stage[data-active="2"] .frame {
+  --tx: 6deg;
+  --ty: -9deg;
 }
 
 .frame {
-  border: 1px solid var(--line);
-  background: var(--bg0);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
   padding: var(--s-24);
+}
+
+.frameBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-16);
+  padding-bottom: var(--s-16);
+  margin-bottom: var(--s-16);
+  border-bottom: 1px solid var(--line);
+}
+
+.frameTitle {
+  color: var(--text-hi);
+}
+
+.progress {
+  display: flex;
+  gap: var(--s-4);
+}
+
+.progress span {
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--line-strong);
+  transition: background-color 600ms var(--ease-out);
+}
+
+.progress span[data-on="true"] {
+  background: var(--accent);
 }
 
 .steps {
@@ -30,14 +88,21 @@
   flex-direction: column;
 }
 
+/* One viewport (minus nav) per step: the pin releases exactly as the last step is centered */
 .step {
-  min-height: 70vh;
+  min-height: calc(100vh - var(--nav-h));
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: var(--s-12);
   border-top: 1px solid var(--line);
   padding: var(--s-48) 0;
+  transition: opacity 700ms var(--ease-out);
+}
+
+/* Dim the steps that aren't driving the diagram */
+.step[data-current="false"] {
+  opacity: 0.35;
 }
 
 .step:last-child {
@@ -50,6 +115,15 @@
 
 .slash {
   color: var(--text-lo);
+}
+
+@media (max-width: 1199px) {
+  .diagramCol {
+    grid-column: 1 / span 7;
+  }
+  .steps {
+    grid-column: 8 / span 5;
+  }
 }
 
 @media (max-width: 959px) {

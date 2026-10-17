@@ -8,8 +8,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg1);
+  background: var(--surface-strong);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
   color: var(--text-hi);
   opacity: 0;
   visibility: hidden;

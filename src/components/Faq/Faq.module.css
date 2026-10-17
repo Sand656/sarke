@@ -1,10 +1,17 @@
 .list {
-  border-top: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 0 var(--s-24);
   max-width: 880px;
 }
 
 .item {
   border-bottom: 1px solid var(--line);
+}
+.item:last-child {
+  border-bottom: 0;
 }
 
 .summary {

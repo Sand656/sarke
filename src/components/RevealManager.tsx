@@ -29,22 +29,28 @@ export function RevealManager() {
           .filter((el) => el.getBoundingClientRect().top > fold);
 
         for (const el of pending) {
-          gsap.set(el, el.dataset.reveal === "mask" ? { clipPath: "inset(0% 0% 100% 0%)", y: 24 } : { autoAlpha: 0, y: 40 });
+          gsap.set(
+            el,
+            el.dataset.reveal === "mask"
+              ? { clipPath: "inset(0% 0% 100% 0%)", y: 32 }
+              : { autoAlpha: 0, y: 56, scale: 0.985, transformOrigin: "50% 100%" },
+          );
         }
 
         ScrollTrigger.batch(pending, {
-          start: "top 92%",
+          start: "top 96%",
           once: true,
           onEnter: (batch) =>
             gsap.to(batch, {
               autoAlpha: 1,
               y: 0,
+              scale: 1,
               clipPath: "inset(0% 0% 0% 0%)",
-              duration: 1,
-              ease: "power3.out",
-              stagger: 0.08,
+              duration: 1.4,
+              ease: "expo.out",
+              stagger: 0.1,
               overwrite: true,
-              clearProps: "transform,clipPath",
+              clearProps: "all",
             }),
         });
       });

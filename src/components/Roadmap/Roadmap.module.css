@@ -27,13 +27,20 @@
   position: relative;
   width: 9px;
   height: 9px;
+  border-radius: 2px;
   background: var(--bg0);
   border: 1px solid var(--line-strong);
 }
 
 .box {
   flex: 1;
+  background: var(--surface);
   border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color var(--t-smooth) var(--ease-out),
+    transform var(--t-smooth) var(--ease-out);
   padding: var(--s-16);
   display: flex;
   flex-direction: column;
@@ -43,7 +50,13 @@
 .tag {
   align-self: flex-start;
   border: 1px solid var(--line-strong);
+  border-radius: 999px;
   padding: 0 var(--s-8);
+}
+
+.item:hover .box {
+  border-color: var(--line-strong);
+  transform: translateY(-3px);
 }
 
 .title {

@@ -22,7 +22,7 @@ export const DeskScene = forwardRef<SVGSVGElement, Props>(function DeskScene(
 
   const windowBody = (accentBar: boolean) => (
     <>
-      <rect className={styles.window} x={0} y={0} width={WIN_W} height={WIN_H} />
+      <rect className={styles.window} x={0} y={0} width={WIN_W} height={WIN_H} rx={3} />
       <line className={styles.stroke} x1={0} y1={WIN_BAR} x2={WIN_W} y2={WIN_BAR} />
       <rect className={accentBar ? styles.accentFill : styles.dot} x={8} y={7} width={4} height={4} />
       <text className={styles.winTitle} x={18} y={12.5}>
@@ -74,13 +74,33 @@ export const DeskScene = forwardRef<SVGSVGElement, Props>(function DeskScene(
         </linearGradient>
       </defs>
 
+      {/* Desk surface, LAN link */}
+      {g.desk.map((d, i) => (
+        <line key={i} className={styles.desk} x1={d.x1} y1={d.y} x2={d.x2} y2={d.y} />
+      ))}
+      <path className={styles.lan} d={g.lan.d} />
+      <text className={styles.lanLabel} x={g.lan.at.x} y={g.lan.at.y} textAnchor={g.lan.anchor}>
+        {g.lan.label}
+      </text>
+      {g.keyboard && <polygon className={styles.stroke} points={g.keyboard} />}
+      {g.keyboard && (
+        <g className={styles.keys}>
+          {[0, 1, 2].map((r) => (
+            <line key={r} x1={410 + r * 2} y1={264 + r * 4} x2={594 + r * 6} y2={264 + r * 4} />
+          ))}
+        </g>
+      )}
+      {g.mouse && (
+        <rect className={styles.stroke} x={g.mouse.x} y={g.mouse.y} width={g.mouse.w} height={g.mouse.h} rx={7} />
+      )}
+
       {/* PC A — two monitors */}
       {g.monitors.map((m, i) => {
         const cx = m.x + m.w / 2;
         const bottom = m.y + m.h;
         return (
           <g key={i}>
-            <rect className={styles.screen} x={m.x} y={m.y} width={m.w} height={m.h} />
+            <rect className={styles.screen} x={m.x} y={m.y} width={m.w} height={m.h} rx={4} />
             <line className={styles.stroke} x1={cx} y1={bottom} x2={cx} y2={bottom + m.neck} />
             <line
               className={styles.stroke}
@@ -97,13 +117,21 @@ export const DeskScene = forwardRef<SVGSVGElement, Props>(function DeskScene(
       </text>
 
       {/* PC B — laptop */}
-      <rect className={styles.stroke} x={g.laptopLid.x} y={g.laptopLid.y} width={g.laptopLid.w} height={g.laptopLid.h} />
+      <rect
+        className={styles.stroke}
+        x={g.laptopLid.x}
+        y={g.laptopLid.y}
+        width={g.laptopLid.w}
+        height={g.laptopLid.h}
+        rx={6}
+      />
       <rect
         className={styles.screen}
         x={g.laptopScreen.x}
         y={g.laptopScreen.y}
         width={g.laptopScreen.w}
         height={g.laptopScreen.h}
+        rx={3}
       />
       <polygon className={styles.stroke} points={g.laptopBase} />
       <text className={styles.label} x={g.clientLabel.x} y={g.clientLabel.y} textAnchor="middle">
@@ -113,7 +141,15 @@ export const DeskScene = forwardRef<SVGSVGElement, Props>(function DeskScene(
       {/* editor.exe on A + its accent highlight */}
       <g transform={`translate(${g.win.x} ${g.win.y}) scale(${g.win.scale})`}>
         {windowBody(false)}
-        <rect data-part="highlight" className={styles.highlight} x={-3} y={-3} width={WIN_W + 6} height={WIN_H + 6} />
+        <rect
+          data-part="highlight"
+          className={styles.highlight}
+          x={-3}
+          y={-3}
+          width={WIN_W + 6}
+          height={WIN_H + 6}
+          rx={5}
+        />
       </g>
 
       {/* Mirror on B, revealed in 8 steps */}
@@ -129,7 +165,7 @@ export const DeskScene = forwardRef<SVGSVGElement, Props>(function DeskScene(
 
       {/* HUD (illustration only: values are dashes) */}
       <g data-part="hud">
-        <rect className={styles.hud} x={g.hud.x} y={g.hud.y} width={g.hud.w} height={g.hud.h} />
+        <rect className={styles.hud} x={g.hud.x} y={g.hud.y} width={g.hud.w} height={g.hud.h} rx={3} />
         {["RTT", "FPS", "LAT"].map((k, i) => (
           <g key={k}>
             <text className={styles.hudKey} x={g.hud.x + 8} y={g.hud.y + 16 + i * 14}>

@@ -56,6 +56,7 @@ const ka: Dict = {
   how: {
     label: "01 / როგორ მუშაობს",
     title: "სამი ნაბიჯი",
+    stepLabel: "ნაბიჯი",
     steps: [
       {
         num: "01",

@@ -20,6 +20,10 @@ export type SceneGeometry = {
   glow: { line: Rect; fade: Rect; dir: "right" | "down" };
   cursor: { start: Pt; edgeA: Pt; edgeB: Pt; onB: Pt; click: Pt };
   target: Pt;
+  desk: { x1: number; x2: number; y: number }[];
+  keyboard: string | null;
+  mouse: Rect | null;
+  lan: { d: string; label: string; at: Pt; anchor: "middle" | "end" };
 };
 
 // The editor window is drawn once at this size and scaled into place.
@@ -38,7 +42,7 @@ export const GEOMETRY: Record<Layout, SceneGeometry> = {
     ],
     laptopLid: { x: 736, y: 76, w: 240, h: 156 },
     laptopScreen: { x: 744, y: 84, w: 224, h: 140 },
-    laptopBase: "736,232 976,232 996,248 716,248",
+    laptopBase: "736,232 976,232 996,252 716,252",
     hostLabel: { x: 352, y: 300 },
     clientLabel: { x: 856, y: 300 },
     illusLabel: { x: 996, y: 368 },
@@ -54,6 +58,10 @@ export const GEOMETRY: Record<Layout, SceneGeometry> = {
       click: { x: 852, y: 140 },
     },
     target: { x: 492, y: 128 },
+    desk: [{ x1: 4, x2: 996, y: 252 }],
+    keyboard: "404,260 600,260 612,274 392,274",
+    mouse: { x: 630, y: 258, w: 15, h: 20 },
+    lan: { d: "M 600 40 Q 760 -12 856 76", label: "LAN · TCP 50500–50501", at: { x: 742, y: 14 }, anchor: "middle" },
   },
   stack: {
     width: 400,
@@ -80,6 +88,13 @@ export const GEOMETRY: Record<Layout, SceneGeometry> = {
       click: { x: 196, y: 272 },
     },
     target: { x: 280, y: 72 },
+    desk: [
+      { x1: 8, x2: 392, y: 143 },
+      { x1: 56, x2: 344, y: 367 },
+    ],
+    keyboard: null,
+    mouse: null,
+    lan: { d: "M 372 128 Q 410 210 308 272", label: "LAN", at: { x: 394, y: 206 }, anchor: "end" },
   },
 };
 

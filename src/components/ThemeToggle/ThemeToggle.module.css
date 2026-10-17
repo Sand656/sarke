@@ -5,6 +5,8 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
   color: var(--text-hi);
   transition:
     border-color var(--t-smooth) var(--ease-out),
