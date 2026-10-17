@@ -13,7 +13,7 @@ export function rich(text: string): ReactNode {
     }
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
-        <strong key={i} style={{ color: "var(--text-hi)", fontWeight: 700 }}>
+        <strong key={i} style={{ color: "var(--ink)", fontWeight: 700 }}>
           {part.slice(2, -2)}
         </strong>
       );

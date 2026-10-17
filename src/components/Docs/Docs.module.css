@@ -41,23 +41,23 @@
   border-left: 1px solid transparent;
   font-size: 14px;
   line-height: 1.4;
-  color: var(--text-mid);
+  color: var(--ink-2);
   transition:
     color var(--t-ui) linear,
     border-color var(--t-ui) linear;
 }
 
 .tocLink:hover {
-  color: var(--text-hi);
+  color: var(--ink);
 }
 
 .tocLink[aria-current="location"] {
-  color: var(--text-hi);
+  color: var(--ink);
   border-left-color: var(--accent);
 }
 
 .tocNum {
-  color: var(--text-lo);
+  color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
 

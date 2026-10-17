@@ -11,7 +11,7 @@
   background: var(--bg-high);
   border: 0;
   border-radius: 50%;
-  color: var(--text-hi);
+  color: var(--ink);
   opacity: 0;
   visibility: hidden;
   transform: translateY(16px);
@@ -34,7 +34,7 @@
 }
 
 .button:hover {
-  border-color: var(--text-lo);
+  border-color: var(--ink-3);
 }
 
 .ring {

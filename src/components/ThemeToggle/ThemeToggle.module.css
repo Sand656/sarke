@@ -9,7 +9,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: var(--text-hi);
+  color: var(--ink);
   transition:
     border-color var(--t-smooth) var(--ease-out),
     background-color var(--t-smooth) var(--ease-out);

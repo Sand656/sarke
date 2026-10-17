@@ -9,7 +9,7 @@
   padding: 0 var(--s-12);
   border: 1px solid var(--line-strong);
   border-radius: var(--r-xs);
-  color: var(--text-hi);
+  color: var(--ink);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
