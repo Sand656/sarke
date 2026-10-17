@@ -1,0 +1,115 @@
+.scene {
+  --fs-label: 18px;
+  --fs-small: 14px;
+  --fs-win: 11px;
+  --fs-hud: 11px;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font);
+}
+
+.scene * {
+  vector-effect: non-scaling-stroke;
+}
+
+.stroke {
+  fill: none;
+  stroke: var(--text-mid);
+  stroke-width: 1;
+}
+
+.screen {
+  fill: var(--bg1);
+  stroke: var(--text-mid);
+  stroke-width: 1;
+}
+
+.window {
+  fill: var(--bg1);
+  stroke: var(--text-mid);
+  stroke-width: 1;
+}
+
+.dot {
+  fill: var(--text-lo);
+}
+
+.accentFill {
+  fill: var(--accent);
+}
+
+.code {
+  stroke: var(--text-lo);
+  stroke-width: 1;
+}
+
+.codeHi {
+  stroke: var(--text-mid);
+  stroke-width: 1;
+}
+
+.winTitle {
+  fill: var(--text-mid);
+  font-size: var(--fs-win);
+}
+
+.highlight {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.label {
+  fill: var(--text-lo);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+}
+
+.illus {
+  fill: var(--text-lo);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+}
+
+.hud {
+  fill: var(--bg0);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.hudKey {
+  fill: var(--text-lo);
+  font-size: var(--fs-hud);
+  letter-spacing: 0.08em;
+}
+
+.hudVal {
+  fill: var(--text-hi);
+  font-size: var(--fs-hud);
+  font-weight: 700;
+}
+
+.link {
+  stroke: var(--text-lo);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.ripple {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.cursor {
+  fill: var(--bg0);
+  stroke: var(--text-hi);
+  stroke-width: 1;
+  stroke-linejoin: miter;
+}
+
+.scene[data-layout="stack"] {
+  --fs-label: 14px;
+  --fs-small: 11px;
+}

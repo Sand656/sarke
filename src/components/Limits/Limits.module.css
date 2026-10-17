@@ -1,0 +1,28 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  border-top: 1px solid var(--line);
+}
+
+.item {
+  display: flex;
+  gap: var(--s-16);
+  align-items: baseline;
+  padding: var(--s-16) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.mark {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  background: var(--warn);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 959px) {
+  .list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

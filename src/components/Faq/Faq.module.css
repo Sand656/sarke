@@ -1,0 +1,86 @@
+.list {
+  border-top: 1px solid var(--line);
+  max-width: 880px;
+}
+
+.item {
+  border-bottom: 1px solid var(--line);
+}
+
+.summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-16);
+  padding: var(--s-24) 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--text-hi);
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover .q {
+  color: var(--accent);
+}
+
+.num {
+  flex: none;
+  color: var(--text-lo);
+}
+
+.q {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: color var(--t-ui) linear;
+}
+
+/* Plus / minus drawn with hairlines */
+.icon {
+  position: relative;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  align-self: center;
+}
+.icon::before,
+.icon::after {
+  content: "";
+  position: absolute;
+  background: var(--text-mid);
+}
+.icon::before {
+  left: 0;
+  right: 0;
+  top: 5.5px;
+  height: 1px;
+}
+.icon::after {
+  top: 0;
+  bottom: 0;
+  left: 5.5px;
+  width: 1px;
+}
+.item[open] .icon::after {
+  display: none;
+}
+.item[open] .num {
+  color: var(--accent);
+}
+
+.a {
+  padding: 0 0 var(--s-24) calc(var(--s-16) + 2ch + 4px);
+  max-width: 72ch;
+}
+
+@media (max-width: 639px) {
+  .q {
+    font-size: 15px;
+  }
+  .a {
+    padding-left: 0;
+  }
+}

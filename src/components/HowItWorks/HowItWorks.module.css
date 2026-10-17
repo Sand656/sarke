@@ -1,0 +1,77 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+.diagramCol {
+  grid-column: 1 / span 7;
+}
+
+.pin {
+  height: calc(100vh - var(--nav-h));
+  display: flex;
+  align-items: center;
+}
+
+.pin > .frame {
+  width: 100%;
+}
+
+.frame {
+  border: 1px solid var(--line);
+  background: var(--bg0);
+  padding: var(--s-24);
+}
+
+.steps {
+  grid-column: 9 / span 4;
+  display: flex;
+  flex-direction: column;
+}
+
+.step {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s-12);
+  border-top: 1px solid var(--line);
+  padding: var(--s-48) 0;
+}
+
+.step:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.num {
+  color: var(--accent);
+}
+
+.slash {
+  color: var(--text-lo);
+}
+
+@media (max-width: 959px) {
+  .steps {
+    grid-column: 1 / -1;
+    gap: var(--s-48);
+  }
+  .step {
+    min-height: 0;
+    border-top: 0;
+    padding: 0;
+  }
+  .step:last-child {
+    border-bottom: 0;
+  }
+  .step .frame {
+    margin-bottom: var(--s-16);
+  }
+}
+
+@media (max-width: 639px) {
+  .frame {
+    padding: var(--s-16);
+  }
+}

@@ -1,0 +1,106 @@
+.hero {
+  min-height: calc(100vh - var(--nav-h));
+  min-height: calc(100svh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  padding: var(--s-64) 0;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: var(--s-48);
+  align-items: center;
+}
+
+.top {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-24);
+}
+
+.copy {
+  grid-column: 1 / span 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-24);
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: flex-start;
+}
+
+/* Accent block caret: 12% of font size wide, full cap height, 530ms blink */
+.caret {
+  display: inline-block;
+  width: 0.12em;
+  height: 0.72em;
+  margin-left: 0.08em;
+  margin-top: 0.09em;
+  background: var(--accent);
+  animation: blink 1060ms steps(1, end) infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.tagline {
+  max-width: 18ch;
+}
+
+html[lang="ka"] .tagline {
+  max-width: 24ch;
+}
+
+.sub {
+  max-width: 60ch;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-12);
+  margin-top: var(--s-8);
+}
+
+.scene {
+  grid-column: 6 / -1;
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--bg0);
+  padding: var(--s-24);
+}
+
+@media (max-width: 959px) {
+  .copy,
+  .scene {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero {
+    padding: var(--s-48) 0;
+  }
+  .scene {
+    padding: var(--s-16);
+  }
+  .ctas {
+    flex-direction: column;
+    align-self: stretch;
+  }
+  .ctas :global(.btn) {
+    width: 100%;
+  }
+}

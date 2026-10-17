@@ -1,0 +1,29 @@
+.button {
+  flex: none;
+  height: 32px;
+  min-width: 72px;
+  padding: 0 var(--s-12);
+  border: 1px solid var(--line-strong);
+  color: var(--text-hi);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition:
+    background-color var(--t-ui) linear,
+    color var(--t-ui) linear,
+    border-color var(--t-ui) linear;
+}
+
+.button:hover {
+  background: var(--bg2);
+}
+
+.button[data-state="copied"] {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.button[data-state="failed"] {
+  color: var(--err);
+  border-color: var(--err);
+}

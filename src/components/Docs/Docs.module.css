@@ -1,0 +1,200 @@
+.layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  padding-top: var(--s-96);
+  padding-bottom: var(--s-128);
+}
+
+.head {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+  padding-bottom: var(--s-48);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--s-48);
+}
+
+.toc {
+  grid-column: 1 / span 3;
+  align-self: start;
+  position: sticky;
+  top: calc(var(--nav-h) + var(--s-32));
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+}
+
+.toc ol {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line);
+}
+
+.tocLink {
+  display: flex;
+  gap: var(--s-12);
+  padding: var(--s-8) var(--s-16);
+  margin-left: -1px;
+  border-left: 1px solid transparent;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-mid);
+  transition:
+    color var(--t-ui) linear,
+    border-color var(--t-ui) linear;
+}
+
+.tocLink:hover {
+  color: var(--text-hi);
+}
+
+.tocLink[aria-current="location"] {
+  color: var(--text-hi);
+  border-left-color: var(--accent);
+}
+
+.tocNum {
+  color: var(--text-lo);
+  font-variant-numeric: tabular-nums;
+}
+
+.tocLink[aria-current="location"] .tocNum {
+  color: var(--accent);
+}
+
+.content {
+  grid-column: 5 / span 8;
+  max-width: 720px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-64);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+  scroll-margin-top: calc(var(--nav-h) + var(--s-24));
+}
+
+.h {
+  padding-bottom: var(--s-12);
+  border-bottom: 1px solid var(--line);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-8);
+}
+
+.list li {
+  position: relative;
+  padding-left: var(--s-24);
+}
+
+.list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 8px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.steps > li {
+  display: flex;
+  gap: var(--s-16);
+  padding: var(--s-16) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.stepNum {
+  flex: none;
+  color: var(--accent);
+  line-height: 1.6;
+}
+
+.stepBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-12);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th,
+.table td {
+  padding: var(--s-12) var(--s-16) var(--s-12) 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.table th {
+  font-weight: 400;
+}
+
+.table td:first-child {
+  white-space: nowrap;
+}
+
+.todo p {
+  color: var(--warn);
+}
+
+@media (max-width: 959px) {
+  .layout {
+    padding-top: var(--s-64);
+  }
+  .toc {
+    grid-column: 1 / -1;
+    position: static;
+    margin-bottom: var(--s-32);
+  }
+  .content {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 639px) {
+  .table td:first-child {
+    white-space: normal;
+  }
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+  }
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .table tr {
+    border-bottom: 1px solid var(--line);
+    padding: var(--s-12) 0;
+  }
+  .table td {
+    border: 0;
+    padding: var(--s-4) 0;
+  }
+}

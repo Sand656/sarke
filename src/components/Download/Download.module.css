@@ -1,0 +1,142 @@
+.panel {
+  margin-top: var(--s-16);
+  background: var(--bg1);
+  border: 1px solid var(--line-strong);
+  padding: var(--s-48);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+.left {
+  grid-column: 1 / span 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-24);
+  min-width: 0;
+}
+
+.right {
+  grid-column: 7 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-24);
+  min-width: 0;
+}
+
+.readouts {
+  border-top: 1px solid var(--line);
+}
+
+.readoutRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-16);
+  min-height: 48px;
+  padding: var(--s-8) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.readoutRow dd {
+  margin: 0;
+  text-align: right;
+  min-width: 0;
+}
+
+.shaCell {
+  display: flex;
+  align-items: center;
+  gap: var(--s-12);
+}
+
+.sha {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar {
+  display: block;
+  height: 14px;
+  max-width: 100%;
+  background: var(--bg2);
+}
+
+.warnNote {
+  color: var(--warn);
+  border-left: 1px solid var(--warn);
+  padding-left: var(--s-16);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-12);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.step {
+  display: flex;
+  gap: var(--s-16);
+  padding: var(--s-16) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.stepNum {
+  flex: none;
+  color: var(--accent);
+  line-height: 1.6;
+  padding-top: 1px;
+}
+
+.stepBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-12);
+}
+
+.notices {
+  margin-top: var(--s-32);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+.notices > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-8);
+}
+
+@media (max-width: 959px) {
+  .panel {
+    display: flex;
+    flex-direction: column;
+    padding: var(--s-24);
+    gap: var(--s-48);
+  }
+  .left,
+  .right {
+    grid-column: 1 / -1;
+  }
+  .notices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .buttons {
+    flex-direction: column;
+  }
+  .buttons :global(.btn) {
+    width: 100%;
+  }
+}
