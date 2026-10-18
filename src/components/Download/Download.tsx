@@ -3,9 +3,9 @@
 import { useSyncExternalStore } from "react";
 import { CodeBlock } from "@/components/CodeBlock/CodeBlock";
 import { CopyButton } from "@/components/CopyButton/CopyButton";
-import { DOWNLOAD_URL, RELEASES_URL, isRepoConfigured } from "@/config";
+import { DOWNLOAD_HREF, RELEASES_URL, isRepoConfigured } from "@/config";
 import { useLang } from "@/i18n/LangProvider";
-import { formatMB, useRelease, type ReleaseInfo } from "@/lib/release";
+import { formatDate, formatMB, useRelease, type ReleaseInfo } from "@/lib/release";
 import { rich } from "@/lib/rich";
 import styles from "./Download.module.css";
 
@@ -23,28 +23,20 @@ function detectWindows() {
 const noopSubscribe = () => () => {};
 
 function Readouts({ data }: { data: ReleaseInfo }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const sha = data.sha256;
   return (
     <dl className={styles.readouts}>
-      <div className={styles.readoutRow}>
-        <dt className="label">{t.download.version}</dt>
-        <dd className="readout">{data.version}</dd>
-      </div>
-      <div className={styles.readoutRow}>
-        <dt className="label">{t.download.released}</dt>
-        <dd className="readout">{data.date}</dd>
-      </div>
+      {data.date && (
+        <div className={styles.readoutRow}>
+          <dt className="label">{t.download.released}</dt>
+          <dd className="readout">{formatDate(data.date, lang)}</dd>
+        </div>
+      )}
       {data.sizeBytes !== null && (
         <div className={styles.readoutRow}>
           <dt className="label">{t.download.size}</dt>
           <dd className="readout">{formatMB(data.sizeBytes)}</dd>
-        </div>
-      )}
-      {data.downloads !== null && (
-        <div className={styles.readoutRow}>
-          <dt className="label">{t.download.downloads}</dt>
-          <dd className="readout">{data.downloads.toLocaleString("en-US")}</dd>
         </div>
       )}
       {sha && (
@@ -66,10 +58,10 @@ function Skeleton() {
   const { t } = useLang();
   return (
     <div className={styles.readouts} role="status" aria-label={t.download.loading}>
-      {[0, 1, 2, 3, 4].map((i) => (
+      {[0, 1, 2].map((i) => (
         <div key={i} className={styles.readoutRow} aria-hidden="true">
           <span className={`shimmer ${styles.bar}`} style={{ width: 72 }} />
-          <span className={`shimmer ${styles.bar}`} style={{ width: i === 4 ? 200 : 112 }} />
+          <span className={`shimmer ${styles.bar}`} style={{ width: i === 2 ? 200 : 112 }} />
         </div>
       ))}
     </div>
@@ -98,21 +90,15 @@ export function Download() {
 
             {!isWindows && <p className={`body ${styles.warnNote}`}>{t.download.notWindows}</p>}
 
-            {/* No GitHub links until the release repo is set (src/config.ts), so nothing 404s */}
             <div className={styles.buttons}>
-              {isRepoConfigured ? (
-                <>
-                  <a href={DOWNLOAD_URL} className="btn btn-primary">
-                    {t.download.button}
-                  </a>
-                  <a href={RELEASES_URL} className="btn btn-secondary">
-                    {t.download.all}
-                  </a>
-                </>
-              ) : (
-                <span className={`btn btn-primary ${styles.soon}`} aria-disabled="true">
-                  {t.download.soon}
-                </span>
+              <a href={DOWNLOAD_HREF} className="btn btn-primary" download>
+                {t.download.button}
+              </a>
+              {/* GitHub link only once the source repo is set (src/config.ts), so nothing 404s */}
+              {isRepoConfigured && (
+                <a href={RELEASES_URL} className="btn btn-secondary">
+                  {t.download.all}
+                </a>
               )}
             </div>
           </div>

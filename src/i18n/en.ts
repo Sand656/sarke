@@ -3,7 +3,7 @@ const en = {
   meta: {
     title: "Sarke — every desktop, one cursor",
     description:
-      "Sarke merges two or more Windows PCs into one workspace. Drag windows and files from one computer to another with the same mouse, as if they were one desktop. Free, local network, no installer.",
+      "Sarke merges two or more Windows PCs into one workspace. Drag windows and files from one computer to another with the same mouse, as if they were one desktop. Free, and it works on your local network.",
     docsTitle: "Docs — Sarke",
   },
   common: {
@@ -35,7 +35,6 @@ const en = {
     ctaDownload: "Download for Windows",
     ctaHow: "See it work",
     meta: "Free and open source · Windows 10 and 11 · Your local network",
-    latest: "Latest",
     stageLabel:
       "Animation: three computers on one desk act as one desktop. One cursor carries a window from the first PC to the second, then drags a file onto the laptop.",
   },
@@ -45,7 +44,7 @@ const en = {
     points: [
       { value: "2+", label: "Windows PCs merged into one desktop" },
       { value: "1", label: "mouse and keyboard for all of them" },
-      { value: "0", label: "installers, drivers or cloud accounts" },
+      { value: "0", label: "cloud accounts, subscriptions or fees" },
     ],
   },
   how: {
@@ -100,8 +99,8 @@ const en = {
         text: "Ctrl+Alt+Shift+Q always hands control back to your main PC.",
       },
       {
-        title: "Portable",
-        text: "Two .exe files and a config.json. Nothing to install, nothing left behind.",
+        title: "One small installer",
+        text: "A single setup file for every PC on the desk. Run it, and Sarke is ready.",
       },
     ],
   },
@@ -114,7 +113,7 @@ const en = {
       network: ["Network", "Same LAN · TCP 50500–50501"],
       capture: ["Capture", "Windows.Graphics.Capture"],
       codec: ["Codec", "JPEG (H.264 planned)"],
-      install: ["Install", "None"],
+      install: ["Install", "Windows installer (SarkeSetup.exe)"],
       language: ["Language", "C++20"],
       size: ["Download size", ""],
       encryption: ["Encryption", "None yet"],
@@ -136,22 +135,19 @@ const en = {
   },
   download: {
     title: "Get Sarke",
-    intro: "One zip for every PC on the desk.",
-    version: "Version",
+    intro: "One installer for every PC on the desk.",
     released: "Released",
     size: "Size",
-    downloads: "Downloads",
     sha: "SHA-256",
     copySha: "Copy SHA-256",
     loading: "Loading release info",
-    unavailable: "Release info unavailable",
-    button: "Download .zip",
-    soon: "Download coming soon",
+    unavailable: "File info unavailable",
+    button: "Download SarkeSetup.exe",
     all: "All releases",
     notWindows: "Sarke runs on Windows 10/11. Download it on your PC.",
     quickTitle: "Quick start",
     steps: [
-      "Download and extract the zip on **every** PC you want to connect.",
+      "Download `SarkeSetup.exe` and install it on **every** PC you want to connect.",
       "On the main PC, allow `sarke_host.exe` in Windows Firewall (Private network).",
       "Run `sarke_host.exe` on the main PC.",
       "Run `sarke_client.exe --host <A's IP>` on each of the other PCs.",
@@ -242,9 +238,8 @@ const en = {
       "`sarke_host.exe` allowed in Windows Firewall on **Private** networks.",
     ],
     install: [
-      "There is no installer. Download `sarke-windows-x64.zip` and extract it on **every** PC.",
-      "The folder contains `sarke_host.exe`, `sarke_client.exe` and `config.json`.",
-      "The .exe is unsigned, so SmartScreen may show “Windows protected your PC”. Click More info → Run anyway. Verify the SHA-256 checksum from the release if you want to be sure.",
+      "Download `SarkeSetup.exe` and run it on **every** PC you want to connect.",
+      "The installer is unsigned, so SmartScreen may show “Windows protected your PC”. Click More info → Run anyway. Verify the SHA-256 checksum from the release if you want to be sure.",
     ],
     firstRunIntro:
       "The main PC runs the host (it owns the physical mouse and keyboard). Every other PC runs the client.",

@@ -1,79 +1,38 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { ASSET_NAME, CHECKSUM_ASSET, GITHUB_OWNER, GITHUB_REPO, RELEASE_API_URL, isRepoConfigured } from "@/config";
+import { DOWNLOAD_URL, SETUP_CHECKSUM } from "@/config";
 
+/**
+ * Live facts about the installer, read with a HEAD request to the storage bucket
+ * (CORS is open on Supabase public storage). Nothing is invented: if the request fails,
+ * the site shows "unavailable" and the download button still works.
+ */
 export type ReleaseInfo = {
-  version: string;
-  date: string; // YYYY-MM-DD
+  date: string | null; // ISO timestamp of the upload
   sizeBytes: number | null;
-  downloads: number | null;
-  sha256: string | null;
+  sha256: string | null; // only when the live file matches the published checksum
 };
 
-export type ReleaseState =
-  | { status: "loading" }
-  | { status: "ok"; data: ReleaseInfo }
-  | { status: "error" };
-
-type GhAsset = {
-  id: number;
-  name: string;
-  size: number;
-  download_count: number;
-  digest?: string | null;
-};
-
-type GhRelease = { tag_name: string; published_at: string | null; created_at: string; assets: GhAsset[] };
+export type ReleaseState = { status: "loading" } | { status: "ok"; data: ReleaseInfo } | { status: "error" };
 
 const ReleaseContext = createContext<ReleaseState>({ status: "loading" });
 
-const SHA_RE = /\b[a-f0-9]{64}\b/i;
-
-async function fetchChecksum(release: GhRelease, zip: GhAsset | undefined): Promise<string | null> {
-  // GitHub publishes a sha256 digest for every uploaded asset.
-  const digest = zip?.digest;
-  if (digest?.startsWith("sha256:")) return digest.slice(7).toLowerCase();
-
-  // Fall back to the .sha256 asset. The API asset endpoint is CORS-enabled; the github.com download URL is not.
-  const shaAsset = release.assets.find((a) => a.name === CHECKSUM_ASSET);
-  if (!shaAsset) return null;
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/assets/${shaAsset.id}`,
-      { headers: { Accept: "application/octet-stream" } },
-    );
-    if (!res.ok) return null;
-    const match = (await res.text()).match(SHA_RE);
-    return match ? match[0].toLowerCase() : null;
-  } catch {
-    return null;
-  }
-}
-
 async function loadRelease(signal: AbortSignal): Promise<ReleaseInfo> {
-  const res = await fetch(RELEASE_API_URL, {
-    headers: { Accept: "application/vnd.github+json" },
-    signal,
-  });
-  if (!res.ok) throw new Error(`GitHub API ${res.status}`);
-  const release = (await res.json()) as GhRelease;
-  const zip = release.assets.find((a) => a.name === ASSET_NAME);
-  const sha256 = await fetchChecksum(release, zip);
-  return {
-    version: release.tag_name.replace(/^v/i, ""),
-    date: (release.published_at ?? release.created_at).slice(0, 10),
-    sizeBytes: zip ? zip.size : null,
-    downloads: zip ? zip.download_count : null,
-    sha256,
-  };
+  const res = await fetch(DOWNLOAD_URL, { method: "HEAD", cache: "no-store", signal });
+  if (!res.ok) throw new Error(`Download HEAD ${res.status}`);
+  const length = Number(res.headers.get("content-length"));
+  const modified = res.headers.get("last-modified");
+  const date = modified ? new Date(modified).toISOString() : null;
+  const size = Number.isFinite(length) && length > 0 ? length : null;
+  const matchesPublished = size === SETUP_CHECKSUM.size && date === SETUP_CHECKSUM.lastModified;
+  return { date, sizeBytes: size, sha256: matchesPublished ? SETUP_CHECKSUM.sha256 : null };
 }
 
 export function ReleaseProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<ReleaseState>(isRepoConfigured ? { status: "loading" } : { status: "error" });
+  const [state, setState] = useState<ReleaseState>({ status: "loading" });
 
   useEffect(() => {
-    if (!isRepoConfigured) return;
     const controller = new AbortController();
     loadRelease(controller.signal)
       .then((data) => setState({ status: "ok", data }))
@@ -88,6 +47,18 @@ export function ReleaseProvider({ children }: { children: React.ReactNode }) {
 
 export function useRelease() {
   return useContext(ReleaseContext);
+}
+
+// Spelled out here: not every browser ships Georgian date data.
+const KA_MONTHS = ["იანვარი", "თებერვალი", "მარტი", "აპრილი", "მაისი", "ივნისი", "ივლისი", "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"];
+const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+/** Dates in words, no dashes: "October 18, 2026" / "18 ოქტომბერი, 2026". */
+export function formatDate(iso: string, lang: "en" | "ka") {
+  const d = new Date(iso);
+  const day = d.getUTCDate();
+  const year = d.getUTCFullYear();
+  return lang === "ka" ? `${day} ${KA_MONTHS[d.getUTCMonth()]}, ${year}` : `${EN_MONTHS[d.getUTCMonth()]} ${day}, ${year}`;
 }
 
 export function formatMB(bytes: number) {

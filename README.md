@@ -17,16 +17,15 @@ npm run typecheck
 
 ## Configure
 
-`src/config.ts` holds the GitHub repo that publishes the **app releases** (it feeds the download button and the live version/size/SHA-256 readouts):
+Everything lives in `src/config.ts`:
 
-- `GITHUB_OWNER`, `GITHUB_REPO`: currently `TODO`. Edit the file, or set `NEXT_PUBLIC_GITHUB_OWNER` / `NEXT_PUBLIC_GITHUB_REPO` in Vercel.
-- `ASSET_NAME = "sarke-windows-x64.zip"`, `CHECKSUM_ASSET = "sarke-windows-x64.zip.sha256"`.
-
-Until the repo is set, the download section shows `release info unavailable` and never shows invented numbers.
+- **Download:** `DOWNLOAD_URL` points at the installer in Supabase storage (`releases/SarkeSetup.exe`). Override with `NEXT_PUBLIC_DOWNLOAD_URL` in Vercel. The download section reads the file's size and upload date live, so they update by themselves.
+- **Checksum:** `SETUP_CHECKSUM` holds the published SHA-256, pinned to the file's size and upload time. When you upload a new `SarkeSetup.exe`, update all three values (instructions are in the file). Until you do, the site hides the checksum rather than show a stale one.
+- **Source code link:** `GITHUB_OWNER` / `GITHUB_REPO` (or `NEXT_PUBLIC_GITHUB_*`). GitHub links stay hidden until set, so nothing points at a 404.
 
 ## Open TODOs
 
-- Release repo owner/name (`src/config.ts`)
+- Source repo owner/name (`src/config.ts`)
 - `config.json` key reference and CMake build commands for `/docs` (from the Sarke C++ repo's `config.json` and `CLAUDE.md`)
 - Team credits and license (footer, `src/i18n/en.ts` + `ka.ts`)
 

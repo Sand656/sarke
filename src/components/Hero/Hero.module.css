@@ -19,10 +19,6 @@
   color: var(--ink);
 }
 
-.version {
-  font-weight: 500;
-  color: var(--ink-3);
-}
 
 .title {
   max-width: 14ch;

@@ -71,7 +71,7 @@ const Keys = () => (
 
 const Portable = () => (
   <div className={styles.vPortable} aria-hidden="true">
-    {["sarke_host.exe", "sarke_client.exe", "config.json"].map((f) => (
+    {["SarkeSetup.exe", "Windows 10 / 11", "x64"].map((f) => (
       <code key={f} className={styles.chip}>
         {f}
       </code>

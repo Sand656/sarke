@@ -160,13 +160,3 @@
   }
 }
 
-.soon {
-  cursor: default;
-  opacity: 0.55;
-}
-.soon:hover {
-  background: var(--accent);
-}
-.soon:active {
-  transform: none;
-}

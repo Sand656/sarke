@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { ChevronRight } from "@/components/Icon";
 import { useLang } from "@/i18n/LangProvider";
-import { useRelease } from "@/lib/release";
 import styles from "./Hero.module.css";
 
 const DeskStage = dynamic(() => import("@/components/three/DeskStage"), {
@@ -15,14 +14,12 @@ const delay = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
 export function Hero() {
   const { t } = useLang();
-  const release = useRelease();
-  const version = release.status === "ok" ? release.data.version : null;
 
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
       <div className={`container ${styles.copy}`}>
         <p className={`intro-up ${styles.eyebrow}`} style={delay(0)}>
-          Sarke{version && <span className={styles.version}> v{version}</span>}
+          Sarke
         </p>
         <h1 id="hero-title" className={`display ${styles.title}`}>
           <span className={styles.line}>
