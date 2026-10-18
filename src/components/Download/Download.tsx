@@ -1,18 +1,12 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { CodeBlock } from "@/components/CodeBlock/CodeBlock";
 import { CopyButton } from "@/components/CopyButton/CopyButton";
 import { DOWNLOAD_HREF, RELEASES_URL, isRepoConfigured } from "@/config";
 import { useLang } from "@/i18n/LangProvider";
 import { formatDate, formatMB, useRelease, type ReleaseInfo } from "@/lib/release";
 import { rich } from "@/lib/rich";
 import styles from "./Download.module.css";
-
-const COMMANDS: Record<number, string> = {
-  2: "sarke_host.exe",
-  3: "sarke_client.exe --host <A's IP>",
-};
 
 function detectWindows() {
   const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
@@ -111,7 +105,6 @@ export function Download() {
                   <span className={styles.stepNum}>{i + 1}</span>
                   <div className={styles.stepBody}>
                     <p className="body">{rich(step)}</p>
-                    {COMMANDS[i] && <CodeBlock code={COMMANDS[i]} />}
                   </div>
                 </li>
               ))}

@@ -42,7 +42,7 @@ export default async function OpenGraphImage() {
           Every desktop. One cursor.
         </div>
         <div style={{ display: "flex", fontSize: 30, color: "#86868b" }}>
-          Merge two or more Windows PCs into one workspace.
+          Link two Windows PCs into one workspace.
         </div>
       </div>
     ),

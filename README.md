@@ -1,6 +1,6 @@
 # sarke-web
 
-Website for **Sarke** (სარკე, "mirror"): a free Windows app that merges two or more PCs on the same LAN into one workspace — one cursor, and windows and files dragged between machines.
+Website for **Sarke** (სარკე, "mirror"): a free Windows app that links two PCs on the same LAN into one workspace — one cursor, a shared clipboard, and windows and files moved between machines.
 
 Next.js (App Router) · TypeScript · CSS Modules + CSS custom properties · React Three Fiber (3D product stage) · GSAP + Lenis · Google Sans (Latin + Georgian, OFL) and Geist Mono.
 
@@ -26,7 +26,7 @@ Everything lives in `src/config.ts`:
 ## Open TODOs
 
 - Source repo owner/name (`src/config.ts`)
-- `config.json` key reference and CMake build commands for `/docs` (from the Sarke C++ repo's `config.json` and `CLAUDE.md`)
+- CMake build commands for `/docs` (from the Sarke C++ repo's `CLAUDE.md`)
 - Team credits and license (footer, `src/i18n/en.ts` + `ka.ts`)
 
 ## 3D performance

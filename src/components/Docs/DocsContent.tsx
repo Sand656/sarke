@@ -15,6 +15,7 @@ const SECTION_IDS: Record<SectionKey, string> = {
   install: "install",
   firstRun: "first-run",
   using: "using",
+  tray: "tray",
   config: "config",
   hotkeys: "hotkeys",
   firewall: "firewall",
@@ -22,8 +23,16 @@ const SECTION_IDS: Record<SectionKey, string> = {
   build: "build",
 };
 
-const FIREWALL_CMD =
-  'netsh advfirewall firewall add rule name="Sarke host" dir=in action=allow program="C:\\Sarke\\sarke_host.exe" enable=yes profile=private';
+// The same rules the installer adds: TCP for control, video and files, UDP for finding the other PC.
+const FIREWALL_CMDS = [
+  'netsh advfirewall firewall add rule name="Sarke" dir=in action=allow protocol=TCP localport=50500-50502',
+  'netsh advfirewall firewall add rule name="Sarke" dir=in action=allow protocol=UDP localport=50503',
+];
+
+const CONFIG_EXAMPLE = `{
+  "client_side": "left",
+  "host_ip": "192.168.1.20"
+}`;
 
 function Todo({ children }: { children: React.ReactNode }) {
   return (
@@ -116,9 +125,6 @@ export function DocsContent() {
                   <span className={`readout ${styles.stepNum}`}>{String(i + 1).padStart(2, "0")}</span>
                   <div className={styles.stepBody}>
                     <p className="body">{rich(step)}</p>
-                    {i === 0 && <CodeBlock code="ipconfig" />}
-                    {i === 1 && <CodeBlock code="sarke_host.exe" />}
-                    {i === 2 && <CodeBlock code="sarke_client.exe --host <A's IP>" />}
                   </div>
                 </li>
               ))}
@@ -129,11 +135,41 @@ export function DocsContent() {
         {section("using", list(d.using))}
 
         {section(
+          "tray",
+          <>
+            <p className="body">{rich(d.trayIntro)}</p>
+            {list(d.tray)}
+          </>,
+        )}
+
+        {section(
           "config",
           <>
             <p className="body">{rich(d.configIntro)}</p>
-            {/* TODO: real config.json keys from the Sarke C++ repo */}
-            <Todo>{d.configTodo}</Todo>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th scope="col" className="label">
+                    {d.configHead[0]}
+                  </th>
+                  <th scope="col" className="label">
+                    {d.configHead[1]}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.configKeys.map(([key, meaning]) => (
+                  <tr key={key}>
+                    <td>
+                      <code className="code-inline">{key}</code>
+                    </td>
+                    <td className="body">{rich(meaning)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <CodeBlock code={CONFIG_EXAMPLE} prompt={false} />
+            <p className="body">{d.configNote}</p>
           </>,
         )}
 
@@ -167,7 +203,9 @@ export function DocsContent() {
           "firewall",
           <>
             {list(d.firewall)}
-            <CodeBlock code={FIREWALL_CMD} />
+            {FIREWALL_CMDS.map((cmd) => (
+              <CodeBlock key={cmd} code={cmd} />
+            ))}
           </>,
         )}
 

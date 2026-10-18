@@ -3,7 +3,7 @@ const en = {
   meta: {
     title: "Sarke — every desktop, one cursor",
     description:
-      "Sarke merges two or more Windows PCs into one workspace. Drag windows and files from one computer to another with the same mouse, as if they were one desktop. Free, and it works on your local network.",
+      "Sarke links two Windows PCs into one workspace. Move the cursor, windows, files and the clipboard from one computer to the other with the same mouse, as if they were one desktop. Free, and it works on your local network.",
     docsTitle: "Docs — Sarke",
   },
   common: {
@@ -31,7 +31,7 @@ const en = {
   hero: {
     titleA: "Every desktop.",
     titleB: "One cursor.",
-    sub: "Sarke merges two or more Windows PCs into one workspace. Grab a window or a file on one computer and drop it on another, with the same mouse and the same drag.",
+    sub: "Sarke links two Windows PCs into one workspace. Push the cursor past the edge of your screen and keep working on the other PC, then carry windows and files across with the same mouse.",
     ctaDownload: "Download for Windows",
     ctaHow: "See it work",
     meta: "Free and open source · Windows 10 and 11 · Your local network",
@@ -42,8 +42,8 @@ const en = {
     statement:
       "This isn't screen sharing. Sarke turns the computers on your desk into one workspace, so moving between them feels like moving across a single screen.",
     points: [
-      { value: "2+", label: "Windows PCs merged into one desktop" },
-      { value: "1", label: "mouse and keyboard for all of them" },
+      { value: "2", label: "Windows PCs, one desktop" },
+      { value: "1", label: "mouse and keyboard for both" },
       { value: "0", label: "cloud accounts, subscriptions or fees" },
     ],
   },
@@ -54,53 +54,53 @@ const en = {
     chapters: [
       {
         title: "Connect",
-        text: "Run `sarke_host.exe` on your main PC and `sarke_client.exe` on the others. They link up over your local network.",
+        text: "Install Sarke on both PCs. On one of them, choose **Connect to the other PC** in the tray menu. Sarke finds the other PC on your network by itself.",
       },
       {
         title: "One cursor",
-        text: "Move past the edge of one screen and the pointer lands on the next computer. Your keyboard goes with it.",
+        text: "Move past the edge of your screen and the pointer lands on the other PC. Your keyboard goes with it, and it works from either side.",
       },
       {
         title: "Carry a window",
-        text: "Grab any window by its title bar and drag it onto another PC's screen. Let go, and it's there.",
+        text: "Turn on desk mode and drag any window over the edge, or press `Ctrl+Alt+Shift+W` to send the window in front. Press it again to bring it back.",
       },
       {
         title: "Drop a file",
-        text: "Drag a file from one desktop into a folder on another. No cloud, no USB stick, no upload.",
+        text: "Drag a file over the edge and drop it into a folder on the other PC, or copy it and paste it there. No cloud, no USB stick, no upload.",
       },
     ],
   },
   features: {
-    title: "One workspace, many machines",
-    intro: "Everything you do across one screen now works across every computer on the desk.",
+    title: "One workspace, two machines",
+    intro: "Everything you do across one screen now works across both computers on the desk.",
     items: [
       {
-        title: "Merge your desktops",
-        text: "Two, three or more Windows PCs behave like one wide desktop, arranged the way they sit on your desk.",
+        title: "The other PC as a monitor",
+        text: "Turn on desk mode and the other PC works like an extra screen. Drag any window over the edge and keep using it there.",
       },
       {
-        title: "Carry windows across",
-        text: "Grab a window on one computer and drag it onto another's screen.",
+        title: "Send a window",
+        text: "Press Ctrl+Alt+Shift+W to send the window in front to the other PC. Press it again and it comes back.",
       },
       {
-        title: "Drop files on any machine",
-        text: "Pick up a file on one desktop and drop it into a folder on another.",
+        title: "Drop files on the other PC",
+        text: "Drag files over the edge into a folder on the other PC, or drop them on the box that Ctrl+Alt+Shift+F opens.",
       },
       {
         title: "One mouse, one keyboard",
-        text: "Push past a screen edge and keep going on the next PC. Typing follows the cursor.",
+        text: "Push past a screen edge and keep going on the other PC. Typing follows the cursor.",
       },
       {
-        title: "Live HUD",
-        text: "RTT, FPS, latency, bitrate, resolution and dropped frames while you work.",
+        title: "Shared clipboard",
+        text: "Copy text, an image or files on one PC and paste them on the other.",
       },
       {
         title: "Emergency exit",
-        text: "Ctrl+Alt+Shift+Q always hands control back to your main PC.",
+        text: "Ctrl+Alt+Shift+Q always hands control back to the PC you're sitting at.",
       },
       {
         title: "One small installer",
-        text: "A single setup file for every PC on the desk. Run it, and Sarke is ready.",
+        text: "The same setup file on both PCs. It adds the firewall rules and display driver Sarke needs, then Sarke waits in the tray.",
       },
     ],
   },
@@ -109,8 +109,8 @@ const en = {
     intro: "Written in C++20 for Windows. It runs on your network and nowhere else.",
     rows: {
       platform: ["Platform", "Windows 10 / 11 · x64"],
-      computers: ["Computers", "2 or more, on the same network"],
-      network: ["Network", "Same LAN · TCP 50500–50501"],
+      computers: ["Computers", "2, on the same network"],
+      network: ["Network", "Same LAN · TCP 50500–50502 · UDP 50503"],
       capture: ["Capture", "Windows.Graphics.Capture"],
       codec: ["Codec", "JPEG (H.264 planned)"],
       install: ["Install", "Windows installer (SarkeSetup.exe)"],
@@ -125,17 +125,18 @@ const en = {
     intro: "Sarke is young. Here is what it doesn't do yet, and what Windows will say about it.",
     items: [
       "**No encryption or pairing yet.** Use only on trusted home or office networks.",
+      "**Two PCs, side by side.** Sarke links one PC to one other PC, standing to its left or right.",
       "**LAN only.** Does not work over the internet.",
       "**Windows only.** No macOS or Linux.",
       "**Unsigned .exe.** Windows SmartScreen shows “Windows protected your PC”. Click More info → Run anyway.",
       "**Antivirus warnings.** Sarke uses keyboard/mouse hooks, input injection and screen capture, so some antivirus tools may flag it. Check the source code and the SHA-256 checksum.",
       "**Minimized windows can't be captured.** Restore them first.",
-      "**Administrator windows** only receive input if the host is also run as Administrator.",
+      "**Administrator windows** only take Sarke's input, and can only be moved, if Sarke itself runs as administrator.",
     ],
   },
   download: {
     title: "Get Sarke",
-    intro: "One installer for every PC on the desk.",
+    intro: "One installer, the same on both PCs.",
     released: "Released",
     size: "Size",
     sha: "SHA-256",
@@ -147,11 +148,11 @@ const en = {
     notWindows: "Sarke runs on Windows 10/11. Download it on your PC.",
     quickTitle: "Quick start",
     steps: [
-      "Download `SarkeSetup.exe` and install it on **every** PC you want to connect.",
-      "On the main PC, allow `sarke_host.exe` in Windows Firewall (Private network).",
-      "Run `sarke_host.exe` on the main PC.",
-      "Run `sarke_client.exe --host <A's IP>` on each of the other PCs.",
-      "Push the cursor off a screen edge. Drag windows and files across as if it were one desktop.",
+      "Download `SarkeSetup.exe` and install it on **both** PCs. It adds the firewall rules Sarke needs.",
+      "Sarke opens by itself and waits in the tray (**^** on the taskbar). If it isn't running, open **Sarke** from the Start menu.",
+      "On one PC, open the tray menu and choose **Connect to the other PC**. Sarke finds the other PC on your network.",
+      "On each PC, choose **Display arrangement…**, drag the other PC to the side where it really stands and press **Apply**.",
+      "Push the cursor past that edge. Turn on **Desk mode** in the tray menu to drag windows across.",
     ],
     smartscreenTitle: "SmartScreen",
     smartscreen:
@@ -164,11 +165,27 @@ const en = {
     items: [
       {
         q: "How many computers can I connect?",
-        a: "Two or more Windows PCs on the same local network. One runs `sarke_host.exe`, the others run `sarke_client.exe`.",
+        a: "Two Windows PCs on the same local network. Install Sarke on both and connect one to the other.",
+      },
+      {
+        q: "How do I connect the two PCs?",
+        a: "Open Sarke on both. On one of them, open the tray menu and choose **Connect to the other PC**. Sarke finds the other PC on your network by itself, so you don't need an IP address. If the link drops, it reconnects on its own.",
+      },
+      {
+        q: "The PCs don't find each other. What now?",
+        a: "Check that both PCs are on the same network and run the same version of Sarke. Some networks, like guest Wi-Fi, block the search. Then open `config.json` on the PC that connects (tray menu → **Open config.json**), set `host_ip` to the other PC's IP address and restart Sarke.",
+      },
+      {
+        q: "What is desk mode?",
+        a: "With desk mode on, the other PC works like an extra monitor. Sarke adds a virtual display the size of the other PC's screen, and any window you drag onto it shows up over there, ready to use with the same mouse. Turn it on or off in the tray menu.",
       },
       {
         q: "Can I move files between computers?",
-        a: "Yes. Drag a file from one desktop and drop it on another. It travels over your local network.",
+        a: "Yes. Drag files over the edge and drop them on the other PC, press `Ctrl+Alt+Shift+F` and drop them on the box at the cursor, or copy them and paste with Ctrl+V in File Explorer on the other PC. They travel over your local network.",
+      },
+      {
+        q: "Why does Windows ask for permission when desk mode starts?",
+        a: "When the other PC has a screen size Sarke hasn't used before, Sarke adds that resolution to the virtual display driver and restarts the driver. Windows asks you to allow that once for each new size.",
       },
       {
         q: "Why does Windows warn me when I open it?",
@@ -196,11 +213,11 @@ const en = {
       },
       {
         q: "Why don't clicks work in some apps?",
-        a: "Windows running as Administrator only receive input if the host is also run as Administrator. Right-click `sarke_host.exe` → Run as administrator.",
+        a: "Windows running as administrator only take Sarke's input if Sarke runs as administrator too. Close Sarke from the tray menu (**Quit Sarke**), then right-click the **Sarke** shortcut → Run as administrator. Sarke can't control the Windows sign-in screen or UAC prompts.",
       },
       {
         q: "How do I get my mouse back if something goes wrong?",
-        a: "Press Ctrl+Alt+Shift+Q. It always returns control to your main PC.",
+        a: "Press Ctrl+Alt+Shift+Q. Control comes back to the PC you're at and Sarke stops crossing edges. Choose **Restart Sarke** in the tray menu to turn it back on.",
       },
     ],
   },
@@ -223,8 +240,9 @@ const en = {
     sections: {
       requirements: "Requirements",
       install: "Install",
-      firstRun: "First run",
-      using: "Moving windows and files",
+      firstRun: "Open and connect",
+      using: "Using Sarke",
+      tray: "The tray menu",
       config: "config.json reference",
       hotkeys: "Hotkeys",
       firewall: "Firewall",
@@ -232,40 +250,66 @@ const en = {
       build: "Building from source",
     },
     requirements: [
-      "Two or more PCs running **Windows 10 or 11, x64**.",
-      "All PCs on the **same local network**.",
-      "TCP port **50500** (control + input) and **50501** (video) reachable on the main PC.",
-      "`sarke_host.exe` allowed in Windows Firewall on **Private** networks.",
+      "Two PCs running **Windows 10 or 11, x64**.",
+      "Both on the **same local network**.",
+      "The **same version** of Sarke on both PCs.",
     ],
     install: [
-      "Download `SarkeSetup.exe` and run it on **every** PC you want to connect.",
+      "Download `SarkeSetup.exe` and run it on **both** PCs.",
+      "The installer puts Sarke in `C:\\Program Files\\Sarke`, adds its Windows Firewall rules and the virtual display driver that desk mode uses, and starts Sarke with Windows.",
       "The installer is unsigned, so SmartScreen may show “Windows protected your PC”. Click More info → Run anyway. Verify the SHA-256 checksum from the release if you want to be sure.",
     ],
     firstRunIntro:
-      "The main PC runs the host (it owns the physical mouse and keyboard). Every other PC runs the client.",
+      "Sarke runs on both PCs. One is the host and the other connects to it, but control works both ways, so it doesn't matter which is which.",
     firstRun: [
-      "On the main PC, find its local IP address: run `ipconfig` and read the IPv4 Address.",
-      "On the main PC, run the host:",
-      "On each of the other PCs, run the client with the main PC's IP:",
-      "Push the cursor off a screen edge — it continues on the next PC, and the keyboard follows.",
+      "Open Sarke on both PCs. It starts with Windows; if it isn't running, open **Sarke** from the Start menu. It lives in the tray (**^** on the taskbar).",
+      "Each PC starts as the host and waits. On one of them, open the tray menu and choose **Connect to the other PC**.",
+      "Sarke finds the other PC on your local network by itself, no IP address needed. When they link up, a notification says **Connected to** and the other PC's name.",
+      "On each PC, choose **Display arrangement…** in the tray menu. Drag the other PC to the side of your screens where it really stands (arrow keys work too) and press **Apply**. Sarke restarts with the new side.",
+      "Push the cursor past that edge. It continues on the other PC, and the keyboard follows.",
     ],
     using: [
-      "**Windows:** grab a window by its title bar, drag it past the screen edge and let go on the other PC.",
-      "**Files:** drag a file from one desktop and drop it into a folder on another PC.",
-      "Clicks, scrolling and typing work on every machine, the same way they do on one computer.",
+      "**Mouse and keyboard:** move past the edge and you're working on the other PC. Clicks, scrolling and typing work there the same way they do here, and either PC's mouse can cross over.",
+      "**Desk mode:** turn on **Desk mode** in the tray menu and the other PC acts as an extra monitor. Drag any window over the edge and it appears on the other PC's screen, where you keep using it.",
+      "**Send a window:** click a window, then press `Ctrl+Alt+Shift+W` to move it to the other PC. Press it again to bring it back. Without desk mode, it opens in a viewer window there.",
+      "**Files:** drag files over the edge and drop them into a folder or app on the other PC, or press `Ctrl+Alt+Shift+F` and drop them on the box that appears at the cursor. Received files go to your Downloads folder (tray menu → **Open received files**).",
+      "**Clipboard:** copy text, an image or files on one PC and paste on the other. Copied files paste with Ctrl+V in File Explorer. Very large copies stay behind: drag those over the edge instead.",
     ],
-    configIntro: "Both executables read `config.json` from their folder.",
-    configTodo:
-      "TODO: the config.json keys come from the Sarke C++ repository (config.json and CLAUDE.md). They are not documented here yet to avoid guessing.",
+    trayIntro:
+      "Open the Sarke menu from its icon in the tray (**^** on the taskbar). The top line shows whether this PC is the host or the client, and how the link is doing.",
+    tray: [
+      "**Display arrangement…:** which side of your screens the other PC stands on.",
+      "**Window quality:** Low, Medium, High or Best picture for windows shown on the other PC.",
+      "**Frame rate:** 15, 30 or 60 fps, or no limit.",
+      "**Desk mode:** use the other PC as an extra monitor.",
+      "**Notifications:** a notification when the other PC connects, when the connection drops, or both.",
+      "**Open received files**, **Open config.json**, **Show log:** the files you received, the settings file and the log.",
+      "**Connect to the other PC** or **Disconnect (make this PC the host)**: link to the other PC, or make this PC the host again.",
+      "**Restart Sarke**, **Quit Sarke:** restart or close Sarke.",
+    ],
+    configIntro:
+      "Sarke keeps its settings in `%LOCALAPPDATA%\\Sarke\\config.json` (tray menu → **Open config.json**). The tray menu and Display arrangement write it for you, so you rarely need to edit it by hand. Restart Sarke after you change it.",
+    configHead: ["Key", "What it does"],
+    configKeys: [
+      ["client_side", "Where the other PC stands next to this one: `\"left\"` or `\"right\"`. Default `\"right\"`. Display arrangement sets it."],
+      ["host_ip", "The other PC's IP address, for networks where Sarke can't find it by itself. Leave it out and Sarke searches on its own."],
+      ["control_port", "TCP port for control and input. Default `50500`."],
+      ["video_port", "TCP port for window pictures. Default `50501`."],
+      ["file_port", "TCP port for files. Default `50502`."],
+      ["jpeg_quality", "Picture quality of shared windows. Window quality in the tray menu sets it to 50, 75, 90 or 95."],
+      ["max_fps", "Frame rate cap for shared windows. Frame rate in the tray menu sets 15, 30, 60 or no limit."],
+    ],
+    configNote: "If you change a port, change it on both PCs and allow the new port in Windows Firewall.",
     hotkeysHead: ["Keys", "Action"],
     hotkeys: [
-      ["Ctrl+Alt+Shift+Q", "Emergency exit — always returns control to the main PC."],
-      ["Ctrl+Alt+Shift+S", "Window picker — choose a window to mirror."],
+      ["Ctrl+Alt+Shift+W", "Send the window in front to the other PC. Press again to bring it back."],
+      ["Ctrl+Alt+Shift+F", "Open a box at the cursor. Drop files on it to send them to the other PC."],
+      ["Ctrl+Alt+Shift+Q", "Emergency exit: control comes back to this PC and Sarke stops crossing edges. Choose Restart Sarke in the tray menu to turn it back on."],
     ],
     firewall: [
-      "Sarke uses TCP **50500** (control + input) and **50501** (video). The other PCs connect to these ports on the main PC.",
-      "The first time `sarke_host.exe` runs, Windows may ask whether to allow it. Allow it on **Private networks**.",
-      "Or add the rule yourself from an Administrator terminal (adjust the path):",
+      "The installer adds the Windows Firewall rules Sarke needs, so there is usually nothing to do.",
+      "Sarke talks over TCP **50500** (control and input), **50501** (window pictures) and **50502** (files), and finds the other PC over UDP **50503**.",
+      "If the rules are gone, add them again from an Administrator terminal:",
     ],
     troubleshootingIntro: "The common problems and their fixes:",
     buildIntro: "Sarke is written in C++20 and builds with CMake presets.",

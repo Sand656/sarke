@@ -47,12 +47,17 @@ const Cursor = () => (
   </div>
 );
 
-const Hud = () => (
+const Clipboard = () => (
   <dl className={styles.vHud} aria-hidden="true">
-    {["RTT", "FPS", "LAT", "BITRATE"].map((k, i) => (
+    {[
+      ["COPY", "Ctrl+C"],
+      ["PASTE", "Ctrl+V"],
+      ["TEXT", "✓"],
+      ["FILES", "✓"],
+    ].map(([k, v], i) => (
       <div key={k} className={styles.meter}>
         <dt>{k}</dt>
-        <dd>--</dd>
+        <dd>{v}</dd>
         <span className={styles.bar} style={{ "--i": i } as React.CSSProperties} />
       </div>
     ))}
@@ -79,7 +84,7 @@ const Portable = () => (
   </div>
 );
 
-const VISUALS = [Merge, Carry, Files, Cursor, Hud, Keys, Portable];
+const VISUALS = [Merge, Carry, Files, Cursor, Clipboard, Keys, Portable];
 
 export function Features() {
   const { t } = useLang();
