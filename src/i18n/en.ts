@@ -36,7 +36,10 @@ const en = {
     ctaHow: "See it work",
     meta: "Free and open source · Windows 10 and 11 · Your local network",
     stageLabel:
-      "Animation: three computers on one desk act as one desktop. One cursor carries a window from the first PC to the second, then drags a file onto the laptop.",
+      "Animation: a display and a laptop side by side. One cursor flies from one screen to the other, carries a window over to the laptop, then brings a file back.",
+  },
+  showcase: {
+    label: "Video: Sarke on two PCs at one desk, with one mouse, windows and files moving between them.",
   },
   manifesto: {
     statement:

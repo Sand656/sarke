@@ -1,0 +1,22 @@
+/* Full-bleed product video at its own 16:9, so its captions stay in frame. Very wide screens
+   are capped at the viewport height (and cropped a little at the sides). */
+.showcase {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 100svh;
+  background: #050506;
+  overflow: hidden;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1200ms var(--ease-out);
+}
+.video[data-ready="true"] {
+  opacity: 1;
+}

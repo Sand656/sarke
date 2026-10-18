@@ -24,6 +24,10 @@ export const SETUP_CHECKSUM = {
   lastModified: "2026-10-18T03:24:10.000Z",
 };
 
+/* ---------- Product video ---------- */
+// The muted, looping video section right after the hero, served from public/video/.
+export const SHOWCASE_VIDEO = "/video/sarke-video.mp4";
+
 /* ---------- Source code (GitHub) ---------- */
 // TODO: set GITHUB_OWNER / GITHUB_REPO to the app's source repository (or NEXT_PUBLIC_GITHUB_* in
 // Vercel). GitHub links stay hidden until then, so nothing points at a 404.

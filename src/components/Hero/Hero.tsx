@@ -5,7 +5,7 @@ import { ChevronRight } from "@/components/Icon";
 import { useLang } from "@/i18n/LangProvider";
 import styles from "./Hero.module.css";
 
-const DeskStage = dynamic(() => import("@/components/three/DeskStage"), {
+const HeroStage = dynamic(() => import("@/components/three/HeroStage"), {
   ssr: false,
   loading: () => <div className={styles.stageLoading} aria-hidden="true" />,
 });
@@ -48,7 +48,7 @@ export function Hero() {
       </div>
 
       <div className={`intro-up ${styles.stage}`} style={delay(560)} role="img" aria-label={t.hero.stageLabel}>
-        <DeskStage mode="loop" className={styles.canvas} />
+        <HeroStage className={styles.canvas} />
       </div>
 
       <p className={`small container ${styles.meta}`}>{t.hero.meta}</p>

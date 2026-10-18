@@ -20,13 +20,13 @@ export type StageState = {
   beams: number; // LAN links lit
 };
 
-type Key = [time: number, value: number];
+export type Key = [time: number, value: number];
 
-const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+export const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 /** Piecewise track with eased segments; holds the first/last value outside the keys. */
-function track(keys: Key[], t: number) {
+export function track(keys: Key[], t: number) {
   if (t <= keys[0][0]) return keys[0][1];
   for (let i = 1; i < keys.length; i++) {
     const [t1, v1] = keys[i];
